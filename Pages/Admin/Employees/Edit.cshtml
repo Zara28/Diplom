@@ -41,7 +41,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Employee.Post" class="control-label"></label>
-                <input asp-for="Employee.Post" class="form-control" />
+                @Html.DropDownList("Post", new SelectList(Model.ListPosts), Model.ListPosts.Where(p => p.Name == Model.Employee.Post))
+                @* <select asp-for="Employee.Post" asp-items="Model.ListPosts" class="form-control"/> *@
                 <span asp-validation-for="Employee.Post" class="text-danger"></span>
             </div>
             <div class="form-group">

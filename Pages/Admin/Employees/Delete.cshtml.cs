@@ -3,25 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Employees
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel(IMediator mediator) : PageModel
     {
-        private readonly diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public DeleteModel(diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         [BindProperty]
         public EmployeeView Employee { get; set; } = default!;
 
@@ -32,7 +26,12 @@ namespace OfficeTime.Pages.Admin.Employees
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FirstOrDefaultAsync(m => m.Id == id);
+            var result = await mediator.Send(new GetEmployeesQuery
+            {
+                Id = id,
+            });
+
+            var employee = result.Response.FirstOrDefault();
 
             if (employee == null)
             {
@@ -40,7 +39,7 @@ namespace OfficeTime.Pages.Admin.Employees
             }
             else
             {
-                Employee = _mapper.Map<EmployeeView>(employee);
+                Employee = employee;
             }
             return Page();
         }
@@ -52,13 +51,10 @@ namespace OfficeTime.Pages.Admin.Employees
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee != null)
+            await mediator.Send(new DeleteEmployeeCommand
             {
-                Employee = _mapper.Map<EmployeeView>(employee);
-                _context.Employees.Remove(employee);
-                await _context.SaveChangesAsync();
-            }
+                Id = id.Value
+            });
 
             return RedirectToPage("./Index");
         }

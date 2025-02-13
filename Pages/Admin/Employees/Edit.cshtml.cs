@@ -1,30 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace OfficeTime.Pages.Admin.Employees
 {
-    public class EditModel : PageModel
+    public class EditModel(IMediator mediator) : PageModel
     {
-        private readonly diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public EditModel(diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         [BindProperty]
         public EmployeeView Employee { get; set; } = default!;
+        [BindProperty]
+        public List<PostView> ListPosts { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -33,12 +26,20 @@ namespace OfficeTime.Pages.Admin.Employees
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FirstOrDefaultAsync(m => m.Id == id);
+            var result = await mediator.Send(new GetEmployeesQuery
+            {
+                Id = id,
+            });
+
+            var employee = result.Response.FirstOrDefault();
             if (employee == null)
             {
                 return NotFound();
             }
-            Employee = _mapper.Map<EmployeeView>(employee);
+
+            var resultPost = await mediator.Send(new GetPostQuery());
+            ListPosts = resultPost.Response;
+
             return Page();
         }
 
@@ -51,30 +52,19 @@ namespace OfficeTime.Pages.Admin.Employees
                 return Page();
             }
 
-            _context.Attach(Employee).State = EntityState.Modified;
-
-            try
+            await mediator.Send(new UpdateEmployeeCommand
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EmployeeExists(Employee.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                Id = Employee.Id,
+                Fio = Employee.Fio,
+                Telegram = Employee.Telegram,
+                Yandex = Employee.Yandex,
+                Datebirth = Employee.Datebirth,
+                Datestart = Employee.Datestart,
+                Password = Employee.Password,
+                PostId = ListPosts.Where(p => p.Name == Employee.Post).First().Id
+            });
 
             return RedirectToPage("./Index");
-        }
-
-        private bool EmployeeExists(int id)
-        {
-            return _context.Employees.Any(e => e.Id == id);
         }
     }
 }

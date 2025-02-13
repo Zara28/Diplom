@@ -1,3 +1,4 @@
+using Goldev.Core.MediatR.Extensions;
 using OfficeTime.DBModels;
 using OfficeTime.Mapper;
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<diplom_adminkaContext>();
+builder.Services.AddMediatR<Program>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,7 +1,9 @@
-﻿
-namespace OfficeTime.ViewModels
+﻿using Goldev.Core.MediatR.Models;
+using OfficeTime.ViewModels;
+
+namespace OfficeTime.Logic.Commands
 {
-    public class EmployeeView
+    public class UpdateEmployeeCommand : IRequestModel
     {
         public int Id { get; set; }
 
@@ -15,7 +17,7 @@ namespace OfficeTime.ViewModels
 
         public DateTime? Datestart { get; set; }
 
-        public string Post { get; set; }
+        public int PostId { get; set; }
         public string Password { get; set; }
     }
 }

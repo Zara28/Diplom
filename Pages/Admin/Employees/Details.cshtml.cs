@@ -3,25 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Employees
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel(IMediator mediator) : PageModel
     {
-        private readonly diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public DetailsModel(diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         public EmployeeView Employee { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -31,14 +24,19 @@ namespace OfficeTime.Pages.Admin.Employees
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FirstOrDefaultAsync(m => m.Id == id);
+            var result = await mediator.Send(new GetEmployeesQuery
+            {
+                Id = id,
+            });
+
+            var employee = result.Response.FirstOrDefault();
             if (employee == null)
             {
                 return NotFound();
             }
             else
             {
-                Employee = _mapper.Map<EmployeeView>(employee);
+                Employee = employee;
             }
             return Page();
         }

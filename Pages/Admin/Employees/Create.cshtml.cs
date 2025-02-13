@@ -3,34 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Employees
 {
-    public class CreateModel : PageModel
+    public class CreateModel(IMediator mediator) : PageModel
     {
-        private readonly diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public CreateModel(diplom_adminkaContext context, IMapper mapper)
+        public async Task<IActionResult> OnGetAsync()
         {
-            _context = context;
-            _mapper = mapper;
-        }
-
-        public IActionResult OnGet()
-        {
+            var resultPost = await mediator.Send(new GetPostQuery());
+            ListPosts = resultPost.Response;
             return Page();
         }
 
         [BindProperty]
         public EmployeeView Employee { get; set; } = default!;
+        public List<PostView> ListPosts { get; set; }
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -38,8 +34,17 @@ namespace OfficeTime.Pages.Admin.Employees
                 return Page();
             }
 
-            _context.Employees.Add(_mapper.Map<DBModels.Employee>(Employee));
-            await _context.SaveChangesAsync();
+            var result = await mediator.Send(new CreateEmployeeCommand
+            {
+                Id = Employee.Id,
+                Fio = Employee.Fio,
+                Telegram = Employee.Telegram,
+                Yandex = Employee.Yandex,
+                Datebirth = Employee.Datebirth,
+                Datestart = Employee.Datestart,
+                Password = Employee.Password,
+                PostId = ListPosts.Where(p => p.Name == Employee.Post).First().Id
+            });
 
             return RedirectToPage("./Index");
         }
