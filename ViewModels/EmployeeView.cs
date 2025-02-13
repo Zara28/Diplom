@@ -7,15 +7,15 @@ namespace OfficeTime.ViewModels
 
         public string Fio { get; set; }
 
-        public string Telegram { get; set; }
+        public string? Telegram { get; set; } = String.Empty;
 
-        public string Yandex { get; set; }
+        public string? Yandex { get; set; } = String.Empty;
 
         public DateTime? Datebirth { get; set; }
 
         public DateTime? Datestart { get; set; }
 
         public string Post { get; set; }
-        public string Password { get; set; }
+        public string? Password { get; set; } = String.Empty;
     }
 }

@@ -3,25 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Posts
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel(IMediator mediator) : PageModel
     {
-        private readonly OfficeTime.DBModels.diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public DeleteModel(OfficeTime.DBModels.diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         [BindProperty]
         public PostView PostView { get; set; } = default!;
 
@@ -32,7 +26,12 @@ namespace OfficeTime.Pages.Admin.Posts
                 return NotFound();
             }
 
-            var postview = await _context.Posts.FirstOrDefaultAsync(m => m.Id == id);
+            var result = await mediator.Send(new GetPostQuery
+            {
+                Id = id
+            });
+
+            var postview = result.Response.FirstOrDefault();
 
             if (postview == null)
             {
@@ -40,7 +39,7 @@ namespace OfficeTime.Pages.Admin.Posts
             }
             else
             {
-                PostView = _mapper.Map<PostView>(postview);
+                PostView = postview;
             }
             return Page();
         }
@@ -52,12 +51,10 @@ namespace OfficeTime.Pages.Admin.Posts
                 return NotFound();
             }
 
-            var postview = await _context.Posts.FindAsync(id);
-            if (postview != null)
+            await mediator.Send(new DeletePostCommand
             {
-                _context.Posts.Remove(postview);
-                await _context.SaveChangesAsync();
-            }
+                Id = id.Value
+            });
 
             return RedirectToPage("./Index");
         }

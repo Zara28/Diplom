@@ -18,6 +18,7 @@ namespace OfficeTime.Pages.Admin.Employees
         public EmployeeView Employee { get; set; } = default!;
         [BindProperty]
         public List<PostView> ListPosts { get; set; }
+        public SelectList Posts { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -37,9 +38,11 @@ namespace OfficeTime.Pages.Admin.Employees
                 return NotFound();
             }
 
+            Employee = employee;
+
             var resultPost = await mediator.Send(new GetPostQuery());
             ListPosts = resultPost.Response;
-
+            Posts = new SelectList(ListPosts, nameof(PostView.Id), nameof(PostView.Name));
             return Page();
         }
 
@@ -61,7 +64,7 @@ namespace OfficeTime.Pages.Admin.Employees
                 Datebirth = Employee.Datebirth,
                 Datestart = Employee.Datestart,
                 Password = Employee.Password,
-                PostId = ListPosts.Where(p => p.Name == Employee.Post).First().Id
+                PostId = Convert.ToInt32(Employee.Post)
             });
 
             return RedirectToPage("./Index");

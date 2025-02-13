@@ -1,28 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Posts
 {
-    public class EditModel : PageModel
+    public class EditModel(IMediator mediator) : PageModel
     {
-        private readonly OfficeTime.DBModels.diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public EditModel(OfficeTime.DBModels.diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         [BindProperty]
         public PostView PostView { get; set; } = default!;
 
@@ -33,17 +19,20 @@ namespace OfficeTime.Pages.Admin.Posts
                 return NotFound();
             }
 
-            var postview =  await _context.Posts.FirstOrDefaultAsync(m => m.Id == id);
+            var result = await mediator.Send(new GetPostQuery
+            {
+                Id = id,
+            });
+
+            var postview =  result.Response.FirstOrDefault();
             if (postview == null)
             {
                 return NotFound();
             }
-            PostView = _mapper.Map<PostView>(postview);
+            PostView = postview;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -51,30 +40,14 @@ namespace OfficeTime.Pages.Admin.Posts
                 return Page();
             }
 
-            _context.Attach(PostView).State = EntityState.Modified;
-
-            try
+            await mediator.Send(new UpdatePostCommand
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PostViewExists(PostView.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                Id = PostView.Id,
+                Name = PostView.Name,
+                Rate = PostView.Rate,
+            });
 
             return RedirectToPage("./Index");
-        }
-
-        private bool PostViewExists(int id)
-        {
-            return _context.Posts.Any(e => e.Id == id);
         }
     }
 }

@@ -3,7 +3,7 @@ using OfficeTime.Logic.Interfaces;
 
 namespace OfficeTime.Logic.Commands
 {
-    public class DeleteEmployeeCommand : BaseEntityCommand, IRequestModel
+    public class DeletePostCommand : BaseEntityCommand, IRequestModel
     {
     }
 }

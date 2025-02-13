@@ -2,6 +2,7 @@
 using Goldev.Core.MediatR.Handlers;
 using Goldev.Core.MediatR.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
 using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
@@ -25,10 +26,12 @@ namespace OfficeTime.Logic.Handlers.Employees
         {
             if(query.Id.HasValue)
             {
-                var emp = _context.Employees.Where(e => e.Id == query.Id).ToList();
+                var emp = _context.Employees
+                    .Include(e => e.Post).Where(e => e.Id == query.Id).ToList();
                 return await Ok(emp.Select(e => _mapper.Map<EmployeeView>(e)).ToList());
             }
-            var employees = _context.Employees.ToList();
+            var employees = _context.Employees
+                 .Include(e => e.Post).ToList();
 
             if(!String.IsNullOrEmpty(query.Name))
             {

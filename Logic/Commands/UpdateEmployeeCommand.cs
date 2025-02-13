@@ -1,12 +1,11 @@
 ﻿using Goldev.Core.MediatR.Models;
+using OfficeTime.Logic.Interfaces;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Logic.Commands
 {
-    public class UpdateEmployeeCommand : IRequestModel
+    public class UpdateEmployeeCommand : BaseEntityCommand, IRequestModel
     {
-        public int Id { get; set; }
-
         public string Fio { get; set; }
 
         public string Telegram { get; set; }

@@ -19,6 +19,9 @@ namespace OfficeTime.Mapper
             CreateMap<Medical, MedicalView>()
                 .ForMember(dest => dest.Emp, opt => opt.MapFrom(medical => medical.Emp.Fio))
                 .ReverseMap();
+
+            CreateMap<Post, PostView>()
+                .ReverseMap();
         }
      }
 }

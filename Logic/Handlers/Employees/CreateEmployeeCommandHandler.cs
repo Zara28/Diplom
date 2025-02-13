@@ -37,6 +37,8 @@ namespace OfficeTime.Logic.Handlers.Employees
 
             _context.Employees.Add(employee);
 
+            _context.SaveChanges();
+
             return await Ok();
         }
     }
