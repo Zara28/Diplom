@@ -3,26 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Medicals
 {
-    public class EditModel : PageModel
+    public class EditModel(IMediator mediator) : PageModel
     {
-        private readonly OfficeTime.DBModels.diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public EditModel(OfficeTime.DBModels.diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         [BindProperty]
         public MedicalView MedicalView { get; set; } = default!;
 
@@ -33,17 +27,20 @@ namespace OfficeTime.Pages.Admin.Medicals
                 return NotFound();
             }
 
-            var medicalview =  await _context.Medicals.FirstOrDefaultAsync(m => m.Id == id);
+            var result = await mediator.Send(new GetMedicalQuery
+            {
+                Id = id
+            });
+
+            var medicalview = result.Response.FirstOrDefault();
             if (medicalview == null)
             {
                 return NotFound();
             }
-            MedicalView = _mapper.Map<MedicalView>(medicalview);
+            MedicalView = medicalview;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -51,30 +48,14 @@ namespace OfficeTime.Pages.Admin.Medicals
                 return Page();
             }
 
-            _context.Attach(MedicalView).State = EntityState.Modified;
-
-            try
+            await mediator.Send(new UpdateMedicalCommand
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MedicalViewExists(MedicalView.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                Id = MedicalView.Id,
+                Datestart = MedicalView.Datestart.Value,
+                Dateend = MedicalView.Dateend.Value
+            });
 
             return RedirectToPage("./Index");
-        }
-
-        private bool MedicalViewExists(int id)
-        {
-            return _context.Medicals.Any(e => e.Id == id);
         }
     }
 }

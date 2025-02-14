@@ -3,30 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Medicals
 {
-    public class IndexModel : PageModel
+    public class IndexModel(IMediator mediator) : PageModel
     {
-        private readonly OfficeTime.DBModels.diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public IndexModel(OfficeTime.DBModels.diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         public IList<MedicalView> MedicalView { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            MedicalView = await _context.Medicals.Select(m => _mapper.Map<MedicalView>(m)).ToListAsync();
+            var result = await mediator.Send(new GetMedicalQuery());
+            MedicalView = result.Response;
         }
     }
 }

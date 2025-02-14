@@ -3,25 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Medicals
 {
-    public class CreateModel : PageModel
+    public class CreateModel(IMediator mediator) : PageModel
     {
-        private readonly OfficeTime.DBModels.diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public CreateModel(OfficeTime.DBModels.diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         public IActionResult OnGet()
         {
             return Page();
@@ -38,8 +31,12 @@ namespace OfficeTime.Pages.Admin.Medicals
                 return Page();
             }
 
-            _context.Medicals.Add(_mapper.Map<Medical>(MedicalView));
-            await _context.SaveChangesAsync();
+            await mediator.Send(new CreateMedicalCommand
+            {
+                DateStart = MedicalView.Datestart.Value,
+                DateEnd = MedicalView.Dateend.Value,
+                EmpId = 0 //todo: session
+            });
 
             return RedirectToPage("./Index");
         }

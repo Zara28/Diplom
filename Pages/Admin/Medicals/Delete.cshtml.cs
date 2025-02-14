@@ -3,25 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Medicals
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel(IMediator mediator) : PageModel
     {
-        private readonly OfficeTime.DBModels.diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public DeleteModel(OfficeTime.DBModels.diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         [BindProperty]
         public MedicalView MedicalView { get; set; } = default!;
 
@@ -32,7 +26,12 @@ namespace OfficeTime.Pages.Admin.Medicals
                 return NotFound();
             }
 
-            var medicalview = await _context.Medicals.FirstOrDefaultAsync(m => m.Id == id);
+            var result = await mediator.Send(new GetMedicalQuery
+            {
+                Id = id
+            });
+
+            var medicalview = result.Response.FirstOrDefault();
 
             if (medicalview == null)
             {
@@ -40,7 +39,7 @@ namespace OfficeTime.Pages.Admin.Medicals
             }
             else
             {
-                MedicalView = _mapper.Map<MedicalView>(medicalview);
+                MedicalView = medicalview;
             }
             return Page();
         }
@@ -52,12 +51,10 @@ namespace OfficeTime.Pages.Admin.Medicals
                 return NotFound();
             }
 
-            var medicalview = await _context.Medicals.FindAsync(id);
-            if (medicalview != null)
+            await mediator.Send(new DeleteMedicalCommand
             {
-                _context.Medicals.Remove(medicalview);
-                await _context.SaveChangesAsync();
-            }
+                Id = id
+            });
 
             return RedirectToPage("./Index");
         }
