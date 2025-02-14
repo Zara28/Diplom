@@ -1,9 +1,10 @@
-﻿namespace OfficeTime.ViewModels
-{
-    public class HolidayView
-    {
-        public int Id { get; set; }
+﻿using Goldev.Core.MediatR.Models;
+using OfficeTime.Logic.Interfaces;
 
+namespace OfficeTime.Logic.Commands
+{
+    public class UpdateHolidayCommand : BaseEntityCommand, IRequestModel
+    {
         public DateTime? Datestart { get; set; }
 
         public DateTime? Dateend { get; set; }
@@ -14,10 +15,8 @@
 
         public bool? Isdirectorapp { get; set; }
 
-        public DateTime? Datecreate { get; set; }
-
         public DateTime? Dateapp { get; set; }
 
-        public string Emp { get; set; }
+        public int Empid { get; set; }
     }
 }

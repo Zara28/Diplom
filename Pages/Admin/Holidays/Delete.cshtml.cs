@@ -3,36 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Holidays
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel(IMediator mediator) : PageModel
     {
-        private readonly OfficeTime.DBModels.diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public DeleteModel(OfficeTime.DBModels.diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         [BindProperty]
         public HolidayView HolidayView { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var holidayview = await _context.Holidays.FirstOrDefaultAsync(m => m.Id == id);
+            var result = await mediator.Send(new GetHolidaysQuery
+            {
+                Id = id
+            });
+
+            var holidayview = result.Response.FirstOrDefault();
 
             if (holidayview == null)
             {
@@ -40,24 +39,19 @@ namespace OfficeTime.Pages.Admin.Holidays
             }
             else
             {
-                HolidayView = _mapper.Map<HolidayView>(holidayview);
+                HolidayView = holidayview;
             }
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string id)
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var holidayview = await _context.Holidays.FindAsync(id);
-            if (holidayview != null)
-            {
-                _context.Holidays.Remove(holidayview);
-                await _context.SaveChangesAsync();
-            }
+            await mediator.Send(new DeleteHolidayCommand { Id = id });
 
             return RedirectToPage("./Index");
         }

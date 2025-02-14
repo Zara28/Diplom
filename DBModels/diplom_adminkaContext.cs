@@ -48,7 +48,9 @@ public partial class diplom_adminkaContext : DbContext
             entity.Property(e => e.Datecreate)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("datecreate");
-            entity.Property(e => e.Isapp).HasColumnName("isapp");
+            entity.Property(e => e.Isapp)
+                .HasDefaultValue(false)
+                .HasColumnName("isapp");
 
             entity.HasOne(d => d.Emp).WithOne(p => p.Dismissal)
                 .HasForeignKey<Dismissal>(d => d.Empid)
@@ -94,7 +96,7 @@ public partial class diplom_adminkaContext : DbContext
             entity.ToTable("holiday");
 
             entity.Property(e => e.Id)
-                .HasColumnType("character varying")
+                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Dateapp)
                 .HasColumnType("timestamp without time zone")

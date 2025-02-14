@@ -3,47 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace OfficeTime.Pages.Admin.Holidays
 {
-    public class EditModel : PageModel
+    public class EditModel(IMediator mediator) : PageModel
     {
-        private readonly OfficeTime.DBModels.diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public EditModel(OfficeTime.DBModels.diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         [BindProperty]
         public HolidayView HolidayView { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var holidayview =  await _context.Holidays.FirstOrDefaultAsync(m => m.Id == id);
+            var result = await mediator.Send(new GetHolidaysQuery
+            {
+                Id = id
+            });
+
+            var holidayview = result.Response.FirstOrDefault();
+
             if (holidayview == null)
             {
                 return NotFound();
             }
-            HolidayView = _mapper.Map<HolidayView>(holidayview);
+            HolidayView = holidayview;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -51,30 +50,24 @@ namespace OfficeTime.Pages.Admin.Holidays
                 return Page();
             }
 
-            _context.Attach(HolidayView).State = EntityState.Modified;
+            await mediator.Send(new UpdateHolidayCommand
+            {
+                Id = HolidayView.Id,
+                Datestart = HolidayView.Datestart,
+                Dateend = HolidayView.Dateend,
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HolidayViewExists(HolidayView.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                Pay = HolidayView.Pay,
+
+                Isleadapp = HolidayView.Isleadapp,
+
+                Isdirectorapp = HolidayView.Isdirectorapp,
+
+                Dateapp = HolidayView.Dateapp,
+
+                Empid = 0 //todo: Session
+            });
 
             return RedirectToPage("./Index");
-        }
-
-        private bool HolidayViewExists(string id)
-        {
-            return _context.Holidays.Any(e => e.Id == id);
         }
     }
 }

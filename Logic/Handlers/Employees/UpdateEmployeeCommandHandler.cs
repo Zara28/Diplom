@@ -27,7 +27,7 @@ namespace OfficeTime.Logic.Handlers.Employees
         {
             var employee = new Employee
             {
-                Id = command.Id,
+                Id = command.Id.Value,
                 Fio = command.Fio,
                 Telegram = command.Telegram,
                 Yandex = command.Yandex,

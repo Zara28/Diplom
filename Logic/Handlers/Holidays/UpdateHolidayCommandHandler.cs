@@ -5,17 +5,17 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
 using OfficeTime.Logic.Commands;
-using OfficeTime.Logic.Handlers.Employees;
+using OfficeTime.Logic.Handlers.Posts;
 using System.Net;
 
-namespace OfficeTime.Logic.Handlers.Posts
+namespace OfficeTime.Logic.Handlers.Holidays
 {
-    public class UpdatePostCommandHandler : AbstractCommandHandler<UpdatePostCommand>
+    public class UpdateHolidayCommandHandler : AbstractCommandHandler<UpdateHolidayCommand>
     {
         private readonly diplom_adminkaContext _context;
         private readonly IMapper _mapper;
-        public UpdatePostCommandHandler(
-                ILogger<UpdatePostCommandHandler> logger,
+        public UpdateHolidayCommandHandler(
+                ILogger<UpdateHolidayCommandHandler> logger,
                 IMediator mediator,
                 IMapper mapper,
                 diplom_adminkaContext context) : base(logger, mediator)
@@ -23,16 +23,27 @@ namespace OfficeTime.Logic.Handlers.Posts
             _context = context;
             _mapper = mapper;
         }
-        public override async Task<IHandleResult> HandleAsync(UpdatePostCommand command, CancellationToken cancellationToken = default)
+        public override async Task<IHandleResult> HandleAsync(UpdateHolidayCommand command, CancellationToken cancellationToken = default)
         {
-            var post = new Post
+            var holiday = new Holiday
             {
                 Id = command.Id.Value,
-                Name = command.Name,
-                Rate = command.Rate,
+                Datestart = command.Datestart,
+
+                Dateend = command.Dateend,
+
+                Pay = command.Pay,
+
+                Isleadapp = command.Isleadapp,
+
+                Isdirectorapp = command.Isdirectorapp,
+
+                Dateapp = command.Dateapp,
+
+                Empid = command.Empid
             };
 
-            _context.Attach(post).State = EntityState.Modified;
+            _context.Attach(holiday).State = EntityState.Modified;
 
             try
             {
@@ -40,7 +51,7 @@ namespace OfficeTime.Logic.Handlers.Posts
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PostExists(post.Id))
+                if (!HolidayExists(holiday.Id))
                 {
                     return await BadRequest("Объект не найден", httpStatusCode: HttpStatusCode.NotFound);
                 }
@@ -53,9 +64,9 @@ namespace OfficeTime.Logic.Handlers.Posts
             return await Ok();
         }
 
-        private bool PostExists(int id)
+        private bool HolidayExists(int id)
         {
-            return _context.Posts.Any(e => e.Id == id);
+            return _context.Holidays.Any(e => e.Id == id);
         }
     }
 }

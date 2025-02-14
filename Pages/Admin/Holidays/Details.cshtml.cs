@@ -3,42 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Holidays
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel(IMediator mediator) : PageModel
     {
-        private readonly OfficeTime.DBModels.diplom_adminkaContext _context;
-        private readonly IMapper _mapper;
-
-        public DetailsModel(OfficeTime.DBModels.diplom_adminkaContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         public HolidayView HolidayView { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var holidayview = await _context.Holidays.FirstOrDefaultAsync(m => m.Id == id);
+            var result = await mediator.Send(new GetHolidaysQuery
+            {
+                Id = id
+            });
+
+            var holidayview = result.Response.FirstOrDefault();
+
             if (holidayview == null)
             {
                 return NotFound();
             }
             else
             {
-                HolidayView = _mapper.Map<HolidayView>(holidayview);
+                HolidayView = holidayview;
             }
             return Page();
         }

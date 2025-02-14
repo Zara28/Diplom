@@ -7,7 +7,7 @@ namespace OfficeTime.DBModels;
 
 public partial class Holiday
 {
-    public string Id { get; set; }
+    public int Id { get; set; }
 
     public DateTime? Datestart { get; set; }
 

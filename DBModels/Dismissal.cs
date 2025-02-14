@@ -7,13 +7,13 @@ namespace OfficeTime.DBModels;
 
 public partial class Dismissal
 {
-    public int? Empid { get; set; }
+    public int Empid { get; set; }
 
     public DateTime? Datecreate { get; set; }
 
     public DateTime? Date { get; set; }
 
-    public bool? Isapp { get; set; }
+    public bool Isapp { get; set; }
 
     public virtual Employee Emp { get; set; }
 }

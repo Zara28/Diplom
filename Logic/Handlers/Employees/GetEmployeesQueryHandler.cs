@@ -36,7 +36,7 @@ namespace OfficeTime.Logic.Handlers.Employees
                 var employees = from emp in _context.Employees
                                 join dim in _context.Dismissals on emp.Id equals dim.Empid
                                 join p in _context.Posts on emp.Postid equals p.Id
-                                where !dim.Isapp.HasValue || !dim.Isapp.Value
+                                where !dim.Isapp || !dim.Isapp
                                 select emp;
 
                 if (!String.IsNullOrEmpty(query.Name))
