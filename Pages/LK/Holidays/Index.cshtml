@@ -1,0 +1,79 @@
+﻿@page
+@using OfficeTime.Pages.Admin.Holidays
+@model IndexLKModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HolidayView[0].Datestart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HolidayView[0].Dateend)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HolidayView[0].Pay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HolidayView[0].Isleadapp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HolidayView[0].Isdirectorapp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HolidayView[0].Datecreate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HolidayView[0].Dateapp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HolidayView[0].Emp)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.HolidayView) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Datestart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dateend)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Isleadapp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Isdirectorapp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Datecreate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dateapp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Emp)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

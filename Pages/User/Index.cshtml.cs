@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace OfficeTime.Pages
+namespace OfficeTime.Pages.User
 {
     public class IndexModel : PageModel
     {

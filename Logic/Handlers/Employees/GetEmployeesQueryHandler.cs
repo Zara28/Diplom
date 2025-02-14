@@ -26,6 +26,16 @@ namespace OfficeTime.Logic.Handlers.Employees
         {
             try
             {
+
+                if(!String.IsNullOrEmpty(query.Name) && !String.IsNullOrEmpty(query.Password))
+                {
+                    var emp = _context.Employees
+                        .Include(e => e.Post)
+                        .Where(e => e.Fio.ToLower() == query.Name.ToLower() && e.Password.ToLower() == query.Password.ToLower());
+
+                    return await Ok(emp.Select(e => _mapper.Map<EmployeeView>(e)).ToList());
+                }
+
                 if (query.Id.HasValue)
                 {
                     var emp = _context.Employees
@@ -33,21 +43,28 @@ namespace OfficeTime.Logic.Handlers.Employees
                         .Where(e => e.Id == query.Id).ToList();
                     return await Ok(emp.Select(e => _mapper.Map<EmployeeView>(e)).ToList());
                 }
-                var employees = from emp in _context.Employees
-                                join dim in _context.Dismissals on emp.Id equals dim.Empid
-                                join p in _context.Posts on emp.Postid equals p.Id
-                                where !dim.Isapp || !dim.Isapp
-                                select emp;
+                var employees = _context.Employees
+                                    .Include(e => e.Post)
+                                    .ToList();
 
                 if (!String.IsNullOrEmpty(query.Name))
                 {
-                    employees = employees.Where(e => e.Fio.ToLower().Contains(query.Name.ToLower()));
+                    employees = employees.Where(e => e.Fio.ToLower().Contains(query.Name.ToLower())).ToList();
                 }
 
                 if (query.PostId.HasValue)
                 {
-                    employees = employees.Where(e => e.Post.Id == query.PostId.Value);
+                    employees = employees.Where(e => e.Post.Id == query.PostId.Value).ToList();
                 }
+
+                employees.ForEach(e =>
+                {
+                    var dis = GetDismissal(e.Id);
+                    if (dis != null)
+                    {
+                        e.Dismissal = dis;
+                    }
+                });
 
                 return await Ok(employees.Select(e => _mapper.Map<EmployeeView>(e)).ToList());
             }
@@ -55,6 +72,11 @@ namespace OfficeTime.Logic.Handlers.Employees
             {
                 return await BadRequest(ex.Message);
             }
+        }
+
+        private Dismissal? GetDismissal(int id)
+        {
+            return _context.Dismissals.FirstOrDefault(d => d.Empid == id);
         }
     }
 }

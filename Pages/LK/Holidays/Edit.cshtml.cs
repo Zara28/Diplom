@@ -16,7 +16,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace OfficeTime.Pages.Admin.Holidays
 {
-    public class EditModel(IMediator mediator) : PageModel
+    public class EditLKModel(IMediator mediator) : PageModel
     {
         [BindProperty]
         public HolidayView HolidayView { get; set; } = default!;

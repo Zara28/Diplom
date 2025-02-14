@@ -5,10 +5,17 @@ using OfficeTime.Mapper;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AddPageRoute("/Login", "");
+});
+//builder.Services.AddRazorPages();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<diplom_adminkaContext>();
 builder.Services.AddMediatR<Program>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,5 +34,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.UseSession();
+
 
 app.Run();

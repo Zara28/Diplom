@@ -16,7 +16,7 @@ namespace OfficeTime.Logic.Commands
 
         public DateTime? Datestart { get; set; }
 
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
         public string Password { get; set; }
     }
 }

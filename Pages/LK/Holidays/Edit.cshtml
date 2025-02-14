@@ -1,5 +1,6 @@
 ﻿@page
-@model OfficeTime.Pages.Admin.Holidays.EditModel
+@using OfficeTime.Pages.Admin.Holidays
+@model EditLKModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -28,21 +29,6 @@
                 <label asp-for="HolidayView.Pay" class="control-label"></label>
                 <input type="checkbox" asp-for="HolidayView.Pay" class="form-control" />
                 <span asp-validation-for="HolidayView.Pay" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HolidayView.Isleadapp" class="control-label"></label>
-                <input asp-for="HolidayView.Isleadapp" class="form-control" />
-                <span asp-validation-for="HolidayView.Isleadapp" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HolidayView.Isdirectorapp" class="control-label"></label>
-                <input asp-for="HolidayView.Isdirectorapp" class="form-control" />
-                <span asp-validation-for="HolidayView.Isdirectorapp" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HolidayView.Dateapp" class="control-label"></label>
-                <input asp-for="HolidayView.Dateapp" class="form-control" />
-                <span asp-validation-for="HolidayView.Dateapp" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
