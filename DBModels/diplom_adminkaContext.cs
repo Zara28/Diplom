@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using OfficeTime.ViewModels;
 
 namespace OfficeTime.DBModels;
 
@@ -17,6 +16,8 @@ public partial class diplom_adminkaContext : DbContext
         : base(options)
     {
     }
+
+    public virtual DbSet<Dismissal> Dismissals { get; set; }
 
     public virtual DbSet<Employee> Employees { get; set; }
 
@@ -32,6 +33,29 @@ public partial class diplom_adminkaContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Dismissal>(entity =>
+        {
+            entity.HasKey(e => e.Empid).HasName("dismissal_pk");
+
+            entity.ToTable("dismissal");
+
+            entity.Property(e => e.Empid)
+                .ValueGeneratedNever()
+                .HasColumnName("empid");
+            entity.Property(e => e.Date)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("date");
+            entity.Property(e => e.Datecreate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("datecreate");
+            entity.Property(e => e.Isapp).HasColumnName("isapp");
+
+            entity.HasOne(d => d.Emp).WithOne(p => p.Dismissal)
+                .HasForeignKey<Dismissal>(d => d.Empid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("dismissal_employee_fk");
+        });
+
         modelBuilder.Entity<Employee>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("employee_pk");
@@ -141,5 +165,4 @@ public partial class diplom_adminkaContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
 }

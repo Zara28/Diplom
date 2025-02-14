@@ -10,6 +10,8 @@ namespace OfficeTime.Mapper
         {
             CreateMap<Employee, EmployeeView>()
                 .ForMember(dest => dest.Post, opt => opt.MapFrom(employee => employee.Post.Name))
+                .ForMember(dest => dest.IsDelete, opt => opt.MapFrom(employee => employee.Dismissal != null))
+                .ForMember(dest => dest.DeleteDate, opt => opt.MapFrom(employee => employee.Dismissal.Date))
                 .ReverseMap();
 
             CreateMap<Holiday, HolidayView>()

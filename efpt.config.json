@@ -15,6 +15,10 @@
    "T4TemplatePath": null,
    "Tables": [
       {
+         "Name": "public.dismissal",
+         "ObjectType": 0
+      },
+      {
          "Name": "public.employee",
          "ObjectType": 0
       },
