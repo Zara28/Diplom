@@ -15,10 +15,10 @@ namespace OfficeTime.ViewModels
 
         public DateTime? Datestart { get; set; }
 
-        public string Post { get; set; }
+        public string? Post { get; set; }
         public string? Password { get; set; } = String.Empty;
 
-        public bool? IsDelete { get; set; }
+        public bool IsDelete { get; set; }
         public DateTime? DeleteDate { get; set; }
     }
 }

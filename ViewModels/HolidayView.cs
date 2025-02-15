@@ -8,7 +8,7 @@
 
         public DateTime? Dateend { get; set; }
 
-        public bool? Pay { get; set; }
+        public bool Pay { get; set; }
 
         public bool? Isleadapp { get; set; }
 

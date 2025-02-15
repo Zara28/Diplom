@@ -10,13 +10,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
 using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Helpers;
 using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace OfficeTime.Pages.Admin.Holidays
 {
-    public class EditLKModel(IMediator mediator) : PageModel
+    public class EditLKModel(IMediator mediator,
+                             IHttpContextAccessor _httpContextAccessor) : PageModel
     {
         [BindProperty]
         public HolidayView HolidayView { get; set; } = default!;
@@ -50,6 +52,8 @@ namespace OfficeTime.Pages.Admin.Holidays
                 return Page();
             }
 
+            int id = (int)_httpContextAccessor.HttpContext.Session.GetId();
+
             await mediator.Send(new UpdateHolidayCommand
             {
                 Id = HolidayView.Id,
@@ -64,7 +68,7 @@ namespace OfficeTime.Pages.Admin.Holidays
 
                 Dateapp = HolidayView.Dateapp,
 
-                Empid = 0 //todo: Session
+                Empid = id
             });
 
             return RedirectToPage("./Index");

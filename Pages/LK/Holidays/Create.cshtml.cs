@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OfficeTime.DBModels;
 using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Helpers;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Holidays
 {
-    public class CreateModel(IMediator mediator) : PageModel
+    public class CreateModel(IMediator mediator,
+                             IHttpContextAccessor _httpContextAccessor) : PageModel
     {
         public IActionResult OnGet()
         {
@@ -25,6 +27,8 @@ namespace OfficeTime.Pages.Admin.Holidays
 
         public async Task<IActionResult> OnPostAsync()
         {
+            int id = (int)_httpContextAccessor.HttpContext.Session.GetId();
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -35,7 +39,7 @@ namespace OfficeTime.Pages.Admin.Holidays
                 Datestart = HolidayView.Datestart,
                 Dateend = HolidayView.Dateend,
                 Pay = HolidayView.Pay,
-                Empid = 0 //todo: session
+                Empid = id
             });
 
             return RedirectToPage("./Index");

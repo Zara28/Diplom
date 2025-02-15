@@ -13,8 +13,11 @@ namespace OfficeTime.Pages
         {
         }
 
-        public async Task<IActionResult> OnPostAsync(string login, string password)
+        public async Task<IActionResult> OnPostAsync(IFormCollection form)
         {
+            var login = form["login"].ToString();
+            var password = form["password"].ToString();
+
             var result = await mediator.Send(new GetEmployeesQuery
             {
                 Name = login,

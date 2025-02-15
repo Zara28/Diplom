@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OfficeTime.DBModels;
 using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Helpers;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Medicals
 {
-    public class CreateModel(IMediator mediator) : PageModel
+    public class CreateModel(IMediator mediator,
+                             IHttpContextAccessor _httpContextAccessor) : PageModel
     {
         public IActionResult OnGet()
         {
@@ -23,7 +25,6 @@ namespace OfficeTime.Pages.Admin.Medicals
         [BindProperty]
         public MedicalView MedicalView { get; set; } = default!;
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -31,11 +32,13 @@ namespace OfficeTime.Pages.Admin.Medicals
                 return Page();
             }
 
+            var id = _httpContextAccessor.HttpContext.Session.GetId();
+
             await mediator.Send(new CreateMedicalCommand
             {
                 DateStart = MedicalView.Datestart.Value,
                 DateEnd = MedicalView.Dateend.Value,
-                EmpId = 0 //todo: session
+                EmpId = (int)id
             });
 
             return RedirectToPage("./Index");
