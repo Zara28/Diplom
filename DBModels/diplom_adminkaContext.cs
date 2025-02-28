@@ -27,6 +27,8 @@ public partial class diplom_adminkaContext : DbContext
 
     public virtual DbSet<Post> Posts { get; set; }
 
+    public virtual DbSet<Role> Roles { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseNpgsql("Password=12345;Username=postgres;Database=diplom_adminka;Host=localhost");
@@ -65,6 +67,7 @@ public partial class diplom_adminkaContext : DbContext
             entity.ToTable("employee");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Accessid).HasColumnName("accessid");
             entity.Property(e => e.Datebirth)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("datebirth");
@@ -82,6 +85,10 @@ public partial class diplom_adminkaContext : DbContext
             entity.Property(e => e.Yandex)
                 .HasColumnType("character varying")
                 .HasColumnName("yandex");
+
+            entity.HasOne(d => d.Access).WithMany(p => p.Employees)
+                .HasForeignKey(d => d.Accessid)
+                .HasConstraintName("employee_role_fk");
 
             entity.HasOne(d => d.Post).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.Postid)
@@ -161,6 +168,20 @@ public partial class diplom_adminkaContext : DbContext
                 .HasColumnType("character varying")
                 .HasColumnName("name");
             entity.Property(e => e.Rate).HasColumnName("rate");
+        });
+
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("role_pk");
+
+            entity.ToTable("role");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Name)
+                .HasColumnType("character varying")
+                .HasColumnName("name");
         });
 
         OnModelCreatingPartial(modelBuilder);

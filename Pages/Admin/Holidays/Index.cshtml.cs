@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
 using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
@@ -21,6 +22,29 @@ namespace OfficeTime.Pages.Admin.Holidays
         {
             var result = await mediator.Send(new GetHolidaysQuery());
             HolidayView = result.Response;
+        }
+        public async Task<IActionResult> OnPostAgree(int holidayId, bool isadmin)
+        {
+            await mediator.Send(new ApproveHolidayCommand
+            {
+                Id = holidayId,
+                IsLead = !isadmin,
+                Value = true
+            });
+
+            return RedirectToPage("./Index");
+        }
+
+        public async Task<IActionResult> OnPostDisgree(int holidayId, bool isadmin)
+        {
+            await mediator.Send(new ApproveHolidayCommand
+            {
+                Id = holidayId,
+                IsLead = !isadmin,
+                Value = false
+            });
+
+            return RedirectToPage("./Index");
         }
     }
 }

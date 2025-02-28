@@ -1,4 +1,6 @@
 ﻿
+using OfficeTime.Mapper;
+
 namespace OfficeTime.ViewModels
 {
     public class EmployeeView
@@ -20,5 +22,6 @@ namespace OfficeTime.ViewModels
 
         public bool IsDelete { get; set; }
         public DateTime? DeleteDate { get; set; }
+        public RoleAccess Role {  get; set; }
     }
 }

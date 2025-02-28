@@ -12,6 +12,7 @@ namespace OfficeTime.Mapper
                 .ForMember(dest => dest.Post, opt => opt.MapFrom(employee => employee.Post.Name))
                 .ForMember(dest => dest.IsDelete, opt => opt.MapFrom(employee => employee.Dismissal != null))
                 .ForMember(dest => dest.DeleteDate, opt => opt.MapFrom(employee => employee.Dismissal.Date))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(employee => (RoleAccess)Enum.Parse(typeof(RoleAccess), employee.Access.Name)))
                 .ReverseMap();
 
             CreateMap<Holiday, HolidayView>()

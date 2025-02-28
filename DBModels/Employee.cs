@@ -23,6 +23,10 @@ public partial class Employee
 
     public int Postid { get; set; }
 
+    public int? Accessid { get; set; }
+
+    public virtual Role Access { get; set; }
+
     public virtual Dismissal Dismissal { get; set; }
 
     public virtual ICollection<Holiday> Holidays { get; set; } = new List<Holiday>();

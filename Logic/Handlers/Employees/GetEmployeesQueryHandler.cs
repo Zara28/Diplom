@@ -31,6 +31,7 @@ namespace OfficeTime.Logic.Handlers.Employees
                 {
                     var emp = _context.Employees
                         .Include(e => e.Post)
+                        .Include(e => e.Access)
                         .Where(e => e.Fio.ToLower() == query.Name.ToLower() && e.Password.ToLower() == query.Password.ToLower());
 
                     return await Ok(emp.Select(e => _mapper.Map<EmployeeView>(e)).ToList());
@@ -40,6 +41,7 @@ namespace OfficeTime.Logic.Handlers.Employees
                 {
                     var emp = _context.Employees
                         .Include(e => e.Post)
+                        .Include(e => e.Access)
                         .Where(e => e.Id == query.Id).ToList();
                     return await Ok(emp.Select(e => _mapper.Map<EmployeeView>(e)).ToList());
                 }

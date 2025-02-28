@@ -33,6 +33,10 @@
       {
          "Name": "public.post",
          "ObjectType": 0
+      },
+      {
+         "Name": "public.role",
+         "ObjectType": 0
       }
    ],
    "UiHint": null,
