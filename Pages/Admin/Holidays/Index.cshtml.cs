@@ -21,10 +21,12 @@ namespace OfficeTime.Pages.Admin.Holidays
         public async Task OnGetAsync()
         {
             var result = await mediator.Send(new GetHolidaysQuery());
-            HolidayView = result.Response;
+            HolidayView = result.Response.Where(h => h.Canceled != true).ToList();
         }
-        public async Task<IActionResult> OnPostAgree(int holidayId, bool isadmin)
+        public async Task<IActionResult> OnPostAgree(IFormCollection form)
         {
+            var holidayId = Convert.ToInt32(form["holidayId"].ToString());
+            var isadmin = Convert.ToBoolean(form["isadmin"].ToString());
             await mediator.Send(new ApproveHolidayCommand
             {
                 Id = holidayId,
@@ -35,8 +37,10 @@ namespace OfficeTime.Pages.Admin.Holidays
             return RedirectToPage("./Index");
         }
 
-        public async Task<IActionResult> OnPostDisgree(int holidayId, bool isadmin)
+        public async Task<IActionResult> OnPostDisgree(IFormCollection form)
         {
+            var holidayId = Convert.ToInt32(form["holidayId"].ToString());
+            var isadmin = Convert.ToBoolean(form["isadmin"].ToString());
             await mediator.Send(new ApproveHolidayCommand
             {
                 Id = holidayId,

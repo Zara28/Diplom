@@ -65,15 +65,11 @@
                         {
                             <label>Согласован</label>
                         }
-                        @if(item.Isleadapp.HasValue && item.Isleadapp == false)
-                        {
-                            <label>Отклонен</label>
-                        }
-                        @if(!item.Isleadapp.HasValue)
+                        else
                         {
                             <form method="post">
-                            <input type="hidden" name="holidayId" value="@item.Id" disabled/>
-                            <input type="hidden" name="isadmin" value="false" disabled />
+                                <input type="hidden" name="holidayId" id="holidayId" value=@item.Id  />
+                                <input type="hidden" name="isadmin" id="isadmin"  value="false" />
                                 <input type="submit" class="btn btn-info" id="btnSave" value="Согласовать" asp-page-handler="Agree" />
                                 <input type="submit" class="btn btn-danger id="btnCancel" value="Отклонить" asp-page-handler="Disgree" />
                             </form>
@@ -84,19 +80,15 @@
                 @if (LoginModel.Role == Mapper.RoleAccess.ADMIN)
                 {
                     <td>
-                        @if (item.Isdirectorapp.HasValue && item.Isdirectorapp == true)
+                        @if (item.Isdirectorapp.HasValue && item.Isdirectorapp == false)
                         {
                             <label>Согласован</label>
                         }
-                        @if (item.Isdirectorapp.HasValue && item.Isdirectorapp == false)
-                        {
-                            <label>Отклонен</label>
-                        }
-                        @if (!item.Isdirectorapp.HasValue)
+                        else
                         {
                             <form method="post">
-                                <input type="hidden" name="holidayId" value="@item.Id" disabled />
-                                <input type="hidden" name="isadmin" value="true" disabled />
+                                <input type="hidden" name="holidayId" id="holidayId" value="@item.Id" disabled />
+                                <input type="hidden" name="isadmin" id="isadmin" value="true" disabled />
                                 <input type="submit" class="btn btn-info" id="btnSave" value="Согласовать" asp-page-handler="Agree" />
                                 <input type="submit" class="btn btn-danger id="btnCancel" value="Отклонить" asp-page-handler="Disgree" />
                             </form>

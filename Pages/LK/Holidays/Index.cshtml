@@ -53,12 +53,34 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Pay)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Isleadapp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Isdirectorapp)
-            </td>
+            @if(item.Canceled.HasValue && item.Canceled == true)
+                {
+                    <td>Отклонен </td>
+                    <td/>
+                }
+            else
+            {
+                <td>
+                    @if(item.Isleadapp == true)
+                    {
+                            <label>Согласован</label>
+                    }
+                    else
+                    {
+                        <label>В процессе</label>
+                    }
+                </td>
+                <td>
+                    @if (item.Isdirectorapp == true)
+                    {
+                        <label>Согласован</label>
+                    }
+                    else
+                    {
+                        <label>В процессе</label>
+                    }
+                </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.Datecreate)
             </td>

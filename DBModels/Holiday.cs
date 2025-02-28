@@ -25,5 +25,7 @@ public partial class Holiday
 
     public int Empid { get; set; }
 
+    public bool? Canceled { get; set; }
+
     public virtual Employee Emp { get; set; }
 }

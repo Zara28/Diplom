@@ -103,8 +103,9 @@ public partial class diplom_adminkaContext : DbContext
             entity.ToTable("holiday");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .HasDefaultValueSql("nextval('employee_id_seq'::regclass)")
                 .HasColumnName("id");
+            entity.Property(e => e.Canceled).HasColumnName("canceled");
             entity.Property(e => e.Dateapp)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("dateapp");

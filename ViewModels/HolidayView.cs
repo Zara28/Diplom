@@ -19,5 +19,7 @@
         public DateTime? Dateapp { get; set; }
 
         public string? Emp { get; set; }
+
+        public bool? Canceled { get; set; } 
     }
 }

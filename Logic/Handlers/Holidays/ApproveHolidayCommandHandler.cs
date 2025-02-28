@@ -23,16 +23,22 @@ namespace OfficeTime.Logic.Handlers.Holidays
         {
             var holiday = _context.Holidays.FirstOrDefault(h => h.Id == command.Id);
 
-            if (command.IsLead)
+            if(!command.Value)
             {
-                holiday.Isleadapp = command.Value;
+                holiday.Canceled = true;
             }
             else
             {
-                holiday.Isdirectorapp = command.Value;
-                holiday.Dateapp = DateTime.Now;
+                if (command.IsLead)
+                {
+                    holiday.Isleadapp = command.Value;
+                }
+                else
+                {
+                    holiday.Isdirectorapp = command.Value;
+                    holiday.Dateapp = DateTime.Now;
+                }
             }
-
             _context.Holidays.Update(holiday);
             _context.SaveChanges();
 
