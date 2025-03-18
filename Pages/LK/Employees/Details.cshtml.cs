@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Commands;
 using OfficeTime.Logic.Helpers;
 using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
@@ -44,6 +45,20 @@ namespace OfficeTime.Pages.Admin.Employees
             {
                 Employee = employee;
             }
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(IFormCollection from)
+        {
+            var date = Convert.ToDateTime(from["date"].ToString());
+            var id = _httpContextAccessor.HttpContext.Session.GetId();
+
+            await mediator.Send(new DismissalCommand
+            {
+                Id = (int)id,
+                Date = date,
+            });
+
             return Page();
         }
     }
