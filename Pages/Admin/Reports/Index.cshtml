@@ -1,0 +1,69 @@
+﻿@page
+@model OfficeTime.Pages.Admin.Reports.IndexModel
+@{
+}
+
+<form method="post">
+    <div class="container">
+        <div class='col-md-5'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker6'>
+                    <input type='date' class="form-control" id="start" name="start"/>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-5'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker7'>
+                    <input type='date' class="form-control" id="end" name="end" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="submit" value="Загрузить" class="btn btn-primary" />
+</form>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Reports[0].FIO)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reports[0].percent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reports[0].holidays)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reports[0].hours)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model.Reports != null)
+        {
+            @foreach (var item in Model.Reports)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FIO)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.percent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.holidays)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.hours)
+                    </td>
+                </tr>
+            }
+        }
+        
+    </tbody>
+</table>

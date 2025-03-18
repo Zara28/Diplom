@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using OfficeTime.DBModels;
 using OfficeTime.Logic.Integrations.Cache;
 using OfficeTime.Logic.Integrations.Models;
+using System.Collections.Generic;
 
 namespace OfficeTime.Logic.Integrations
 {
@@ -27,23 +28,34 @@ namespace OfficeTime.Logic.Integrations
     {
         public override async Task<IHandleResult<List<Report>>> HandleAsync(LoadADataReportCommand query, CancellationToken cancellationToken)
         {
-            var cacheResult = cache.GetOrCreate(query, async() => (ResponseModel<List<YandexTask>>)(await mediator.Send(mediator))).Result;
+            var task = async (LoadADataReportCommand query, IMediator mediator) =>
+            {
+                var result = await mediator.Send(new LoadAllTasksByFilterCommand
+                {
+                    StartIntervalEnding = query.StartIntervalEnding,
+                    EndIntervalEnding = query.EndIntervalEnding
+                });
+
+                return result;
+            };
+            var cacheResult = await cache.GetOrCreate(query, async() => await task(query, mediator));
             var holidaydata = context.Holidays.Where(h => h.Datestart >= query.StartIntervalEnding && h.Dateend <= query.EndIntervalEnding);
             var medicaldata = context.Medicals.Where(h => h.Datestart >= query.StartIntervalEnding && h.Dateend <= query.EndIntervalEnding);
 
-            var users = context.Employees;
+            var users = context.Employees.ToList();
 
             List<Report> results = new List<Report>();
 
             foreach (var user in users)
             {
-                var holidays = holidaydata.Where(h => h.Empid == user.Id).OrderBy(h => h.Datestart);
-                var medicals = medicaldata.Where(h => h.Empid == user.Id).OrderBy(h => h.Datestart);
-                var tracker = cacheResult.Response.Where(r => r.Assignee.Name == user.Yandex);
+                var holidays = holidaydata.Where(h => h.Empid == user.Id).OrderBy(h => h.Datestart).ToList();
+                var medicals = medicaldata.Where(h => h.Empid == user.Id).OrderBy(h => h.Datestart).ToList();
+                var data = cacheResult.Response;
+                var tracker = data.Where(r => r.Assignee.Name.Trim().ToLower() == user.Yandex?.Trim().ToLower());
 
                 double holidaysHours = holidays.Sum(h => SumHour(h.Datestart, h.Dateend));
                 double medicalsHours = holidays.Sum(h => SumHour(h.Datestart, h.Dateend));
-                double trackerHours = tracker.Sum(t => Convert.ToDouble(t.Spent));
+                double trackerHours = tracker.Sum(t => ConvertFromString(t.Spent));
                 double totalHours = SumHour(query.StartIntervalEnding, query.EndIntervalEnding);
 
                 var report = new Report()
@@ -63,7 +75,7 @@ namespace OfficeTime.Logic.Integrations
         public double SumHour(DateTime? start, DateTime? end)
         {
             var totalDays = 0;
-            for (var date = start; date < end; date = date.Value.AddDays(1))
+            for (var date = start; date <= end; date = date.Value.AddDays(1))
             {
                 if (date.Value.DayOfWeek != DayOfWeek.Saturday
                     && date.Value.DayOfWeek != DayOfWeek.Sunday)
@@ -71,6 +83,50 @@ namespace OfficeTime.Logic.Integrations
             }
 
             return totalDays*8;
+        }
+
+        public double ConvertFromString(string str)
+        {
+            TimeSpan ts = new();
+
+            double hours = 0;
+
+            int num = 0;
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (char.IsDigit(str[i]))
+                {
+                    num *= 10;
+                    num += str[i] - '0';
+                }
+                else if (num > 0)
+                {
+                    switch (char.ToLower(str[i]))
+                    {
+                        case 'm' or 'м':
+                            ts += TimeSpan.FromMinutes(num);
+                            hours += (double)num / 60;
+                            break;
+                        case 'h' or 'ч':
+                            ts += TimeSpan.FromHours(num);
+                            hours += num;
+                            break;
+                        case 'd' or 'д':
+                            ts += TimeSpan.FromDays(num);
+                            hours += (double)num * 8;
+                            break;
+                        case 'w' or 'н':
+                            ts += TimeSpan.FromDays(num * 7);
+                            hours += (double)num * 8 * 5;
+                            break;
+                        default:
+                            break;
+                    }
+                    num = 0;
+                }
+            }
+            return hours;
         }
     }
 }

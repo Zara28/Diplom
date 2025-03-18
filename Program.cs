@@ -21,6 +21,7 @@ builder.Services.AddSingleton<MemoryCache<ResponseModel<List<YandexTask>>>>();
 builder.Services.AddMediatR<Program>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
+builder.Configuration.AddConstants();
 
 builder.Services.ConfigureWithEnv<YandexTrackerConfiguration>(builder.Configuration);
 

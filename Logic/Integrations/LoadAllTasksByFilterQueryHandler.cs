@@ -55,7 +55,10 @@ namespace OfficeTime.Logic.Integrations
 
                     var obj = JsonConvert.DeserializeObject<List<ApiYandexTask>>(responce.Content);
 
-                    GetFilteredTask(obj, request).ForEach(o => listTasks.Add(o));
+                    foreach (var task in obj)
+                    {
+                        listTasks.Add(task);
+                    }
 
                     var headers = responce.Headers.Where(h => h.Value.Contains("next")).Select(h => h.Value).FirstOrDefault();
 
