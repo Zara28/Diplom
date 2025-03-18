@@ -1,7 +1,10 @@
 using Goldev.Core.Extensions;
 using Goldev.Core.MediatR.Extensions;
+using Goldev.Core.Models;
 using OfficeTime.DBModels;
 using OfficeTime.Logic.Integrations;
+using OfficeTime.Logic.Integrations.Cache;
+using OfficeTime.Logic.Integrations.Models;
 using OfficeTime.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +17,7 @@ builder.Services.AddRazorPages(options =>
 //builder.Services.AddRazorPages();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<diplom_adminkaContext>();
+builder.Services.AddSingleton<MemoryCache<ResponseModel<List<YandexTask>>>>();
 builder.Services.AddMediatR<Program>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();

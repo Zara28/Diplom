@@ -11,17 +11,6 @@ using RestSharp;
 
 namespace OfficeTime.Logic.Integrations
 {
-    public class LoadAllTasksByFilterCommand : IRequestModel<List<YandexTask>>
-    {
-
-        public DateTime? EndIntervalEnding { get; set; }
-        public DateTime? StartIntervalEnding { get; set; }
-
-        public List<string>? Statuses { get; set; }
-
-        public string? UserId { get; set; }
-    }
-
     [TrackedType]
     public class LoadAllTasksByFilterQueryHandler(ILogger<LoadAllTasksByFilterQueryHandler> logger,
         IMediator mediator,
