@@ -5,6 +5,6 @@
         ADMIN,
         LEAD,
         EMPTY,
-        NONE = 0
+        NONE = -1
     }
 }

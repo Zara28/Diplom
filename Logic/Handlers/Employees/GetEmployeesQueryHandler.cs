@@ -32,7 +32,16 @@ namespace OfficeTime.Logic.Handlers.Employees
                     var emp = _context.Employees
                         .Include(e => e.Post)
                         .Include(e => e.Access)
-                        .Where(e => e.Fio.ToLower() == query.Name.ToLower() && e.Password.ToLower() == query.Password.ToLower());
+                        .Where(e => e.Fio.ToLower() == query.Name.ToLower() && e.Password.ToLower() == query.Password.ToLower()).ToList();
+
+                    emp.ForEach(e =>
+                    {
+                        var dis = GetDismissal(e.Id);
+                        if (dis != null)
+                        {
+                            e.Dismissal = dis;
+                        }
+                    });
 
                     return await Ok(emp.Select(e => _mapper.Map<EmployeeView>(e)).ToList());
                 }
@@ -43,6 +52,16 @@ namespace OfficeTime.Logic.Handlers.Employees
                         .Include(e => e.Post)
                         .Include(e => e.Access)
                         .Where(e => e.Id == query.Id).ToList();
+
+                    emp.ForEach(e =>
+                    {
+                        var dis = GetDismissal(e.Id);
+                        if (dis != null)
+                        {
+                            e.Dismissal = dis;
+                        }
+                    });
+
                     return await Ok(emp.Select(e => _mapper.Map<EmployeeView>(e)).ToList());
                 }
                 var employees = _context.Employees

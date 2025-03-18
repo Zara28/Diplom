@@ -1,5 +1,7 @@
+using Goldev.Core.Extensions;
 using Goldev.Core.MediatR.Extensions;
 using OfficeTime.DBModels;
+using OfficeTime.Logic.Integrations;
 using OfficeTime.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,8 @@ builder.Services.AddScoped<diplom_adminkaContext>();
 builder.Services.AddMediatR<Program>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
+
+builder.Services.ConfigureWithEnv<YandexTrackerConfiguration>(builder.Configuration);
 
 var app = builder.Build();
 

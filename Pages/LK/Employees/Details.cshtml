@@ -51,7 +51,7 @@
     </dl>
     @if(Model.Employee.IsDelete)
     {
-        <p>Вы подали заявление на увольнение от @Model.Employee.DeleteDate</p>
+        <p>Вы подали заявление на увольнение от @Model.Employee.DeleteDate.Value.Date</p>
     }
     else
     {
