@@ -31,4 +31,8 @@
     <PackageReference Include="RestSharp.Serializers.NewtonsoftJson" Version="112.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Admin\Reports\Holidays\" />
+  </ItemGroup>
+
 </Project>

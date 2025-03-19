@@ -6,12 +6,11 @@ using OfficeTime.Logic.Integrations;
 using OfficeTime.Logic.Integrations.Models;
 using OfficeTime.ViewModels;
 
-namespace OfficeTime.Pages.Admin.Reports
+namespace OfficeTime.Pages.Admin.Reports.Operation
 {
     public class IndexModel(IMediator mediator) : PageModel
     {
         public IList<Report> Reports { get; set; } = default!;
-
         public void OnGet()
         {
 

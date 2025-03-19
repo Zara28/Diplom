@@ -1,0 +1,54 @@
+﻿@page
+@model MonthsModel
+@{
+}
+<form method="get">
+    
+        <div class='col-md-5'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker7'>
+                <input type='number' class="form-control" id="months" name="months" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="submit" value="Загрузить" class="btn btn-primary" />
+</form>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <p>Фамилия</p>
+            </th>
+            @for (int i = (Model.Model[0].Percents.Count()-1)*(-1); i <= 0; i++)
+            {
+                <th>
+                    <p>@DateTime.Now.AddMonths(i).ToShortDateString()</p>
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Model != null)
+        {
+            @foreach (var item in Model.Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FIO)
+                    </td>
+                    @foreach (var i in item.Percents)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => i)
+                        </td>
+                    }
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
