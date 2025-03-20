@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace OfficeTime.Logic.Integrations.Models
+namespace OfficeTime.Logic.Integrations.YandexTracker.Models
 {
     public class User
     {

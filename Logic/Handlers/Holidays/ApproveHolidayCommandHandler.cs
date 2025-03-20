@@ -4,6 +4,7 @@ using Goldev.Core.MediatR.Models;
 using MediatR;
 using OfficeTime.DBModels;
 using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Integrations.Refit.Commands;
 
 namespace OfficeTime.Logic.Handlers.Holidays
 {
@@ -18,7 +19,7 @@ namespace OfficeTime.Logic.Handlers.Holidays
         {
             _context = context;
         }
-        //todo: send notification
+
         public override async Task<IHandleResult> HandleAsync(ApproveHolidayCommand command, CancellationToken cancellationToken = default)
         {
             var holiday = _context.Holidays.FirstOrDefault(h => h.Id == command.Id);
@@ -41,6 +42,17 @@ namespace OfficeTime.Logic.Handlers.Holidays
             }
             _context.Holidays.Update(holiday);
             _context.SaveChanges();
+
+            var emp = _context.Employees.FirstOrDefault(e => e.Id == holiday.Empid);
+
+            var who = command.IsLead ? "Лид" : "Руководитель";
+            var what = command.Value ? "одобрил" : "отклонил";
+
+            await _mediator.Send(new NotificationSendCommand
+            {
+                Telegram = emp.Telegram,
+                Message = $"{who} {what} вашу заявку на отпуск с {holiday.Datestart}"
+            });
 
             return await Ok();
         }

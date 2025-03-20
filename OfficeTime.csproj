@@ -27,6 +27,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
     <PackageReference Include="PIHelperSh.Configuration" Version="1.0.1" />
     <PackageReference Include="PIHelperSh.Core" Version="1.0.1" />
+    <PackageReference Include="Refit" Version="8.0.0" />
     <PackageReference Include="RestSharp" Version="112.1.0" />
     <PackageReference Include="RestSharp.Serializers.NewtonsoftJson" Version="112.1.0" />
     <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="28.2.11" />

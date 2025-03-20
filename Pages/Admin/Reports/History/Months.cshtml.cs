@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using OfficeTime.Logic.Integrations.Models;
+using OfficeTime.Logic.Integrations.YandexTracker.Models;
 
 namespace OfficeTime.Pages.Admin.Reports.History
 {

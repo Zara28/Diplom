@@ -1,7 +1,7 @@
 ﻿using RestSharp;
 using RestSharp.Serializers.NewtonsoftJson;
 
-namespace OfficeTime.Logic.Integrations
+namespace OfficeTime.Logic.Integrations.YandexTracker
 {
     public static class RestSharpExtentions
     {

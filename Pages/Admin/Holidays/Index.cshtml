@@ -80,7 +80,7 @@
                 @if (LoginModel.Role == Mapper.RoleAccess.ADMIN)
                 {
                     <td>
-                        @if (item.Isdirectorapp.HasValue && item.Isdirectorapp == false)
+                        @if (item.Isdirectorapp.HasValue && item.Isdirectorapp == true)
                         {
                             <label>Согласован</label>
                         }

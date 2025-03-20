@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using PIHelperSh.Core.Convertation;
 
-namespace OfficeTime.Logic.Integrations.Models
+namespace OfficeTime.Logic.Integrations.YandexTracker.Models
 {
     [JsonConverter(typeof(JsonPathConverter))]
     public class Project

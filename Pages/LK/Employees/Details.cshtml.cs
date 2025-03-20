@@ -59,7 +59,19 @@ namespace OfficeTime.Pages.Admin.Employees
                 Date = date,
             });
 
-            return Page();
+            return RedirectToPage("./Details");
+        }
+
+        public async Task<IActionResult> OnPostCancelAsync(IFormCollection from)
+        {
+            var id = _httpContextAccessor.HttpContext.Session.GetId();
+
+            await mediator.Send(new DismissalCancelCommand
+            {
+                Id = (int)id
+            });
+
+            return RedirectToPage("./Details");
         }
     }
 }

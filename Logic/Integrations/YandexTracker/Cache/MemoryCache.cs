@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Concurrent;
 
-namespace OfficeTime.Logic.Integrations.Cache
+namespace OfficeTime.Logic.Integrations.YandexTracker.Cache
 {
     public class MemoryCache<TItem>
     {

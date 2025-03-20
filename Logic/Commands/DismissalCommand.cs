@@ -7,4 +7,9 @@ namespace OfficeTime.Logic.Commands
         public int Id { get; set; }
         public DateTime Date { get; set; }
     }
+
+    public class DismissalCancelCommand : IRequestModel
+    {
+        public int Id { get; set; }
+    }
 }

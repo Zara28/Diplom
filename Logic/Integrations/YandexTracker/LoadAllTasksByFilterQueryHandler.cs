@@ -6,10 +6,10 @@ using MediatR;
 using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using OfficeTime.Logic.Integrations.Models;
+using OfficeTime.Logic.Integrations.YandexTracker.Models;
 using RestSharp;
 
-namespace OfficeTime.Logic.Integrations
+namespace OfficeTime.Logic.Integrations.YandexTracker
 {
     [TrackedType]
     public class LoadAllTasksByFilterQueryHandler(ILogger<LoadAllTasksByFilterQueryHandler> logger,
@@ -90,14 +90,14 @@ namespace OfficeTime.Logic.Integrations
                 AddParameter("\\\"Start Date\\\"", filter.StartIntervalEnding, filter.EndIntervalEnding)
             };
 
-            return System.Threading.Tasks.Task.FromResult($"{{\"query\":\"{CreateResultQuery(conditions)}\"}}");
+            return Task.FromResult($"{{\"query\":\"{CreateResultQuery(conditions)}\"}}");
         }
 
-        public string CreateResultQuery(List<string> conditions, string separator = " ") => string.Join(separator, conditions.Where(x => !String.IsNullOrEmpty(x)));
+        public string CreateResultQuery(List<string> conditions, string separator = " ") => string.Join(separator, conditions.Where(x => !string.IsNullOrEmpty(x)));
 
         public string AddParameter<T>(string paramName, List<T>? list) => list == null ? "" : AddParameter(paramName, string.Join(", ", list));
 
-        public string AddParameter(string paramName, string? value) => String.IsNullOrEmpty(value) ? "" : $"{paramName}: {value}";
+        public string AddParameter(string paramName, string? value) => string.IsNullOrEmpty(value) ? "" : $"{paramName}: {value}";
 
         public string AddParameter(string paramName, DateTime? from = null, DateTime? to = null) => ((from != null ? 1 : 0) | (to != null ? 1 : 0) << 1) switch
         {
@@ -113,7 +113,7 @@ namespace OfficeTime.Logic.Integrations
             foreach (var answer in answers)
             {
                 if (filter.Statuses != null && filter.Statuses.Contains(answer.Status)
-                    || (filter.UserId != null && filter.UserId == answer.Assignee.Id))
+                    || filter.UserId != null && filter.UserId == answer.Assignee.Id)
                 {
                     filteredList.Add(answer);
                 }

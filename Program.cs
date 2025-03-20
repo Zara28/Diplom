@@ -2,10 +2,12 @@ using Goldev.Core.Extensions;
 using Goldev.Core.MediatR.Extensions;
 using Goldev.Core.Models;
 using OfficeTime.DBModels;
-using OfficeTime.Logic.Integrations;
-using OfficeTime.Logic.Integrations.Cache;
-using OfficeTime.Logic.Integrations.Models;
+using OfficeTime.Logic.Integrations.Refit.Intefaces;
+using OfficeTime.Logic.Integrations.YandexTracker;
+using OfficeTime.Logic.Integrations.YandexTracker.Cache;
+using OfficeTime.Logic.Integrations.YandexTracker.Models;
 using OfficeTime.Mapper;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace OfficeTime.Logic.Integrations.Models
+namespace OfficeTime.Logic.Integrations.YandexTracker.Models
 {
     [AutoMap(typeof(ApiYandexTask))]
     public class YandexTask

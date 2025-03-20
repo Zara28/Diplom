@@ -1,6 +1,7 @@
 ﻿using Goldev.Core.MediatR.Models;
+using OfficeTime.Logic.Integrations.YandexTracker;
 
-namespace OfficeTime.Logic.Integrations.Models
+namespace OfficeTime.Logic.Integrations.YandexTracker.Models
 {
     public class LoadAllTasksByFilterCommand : IRequestModel<List<YandexTask>>
     {

@@ -52,6 +52,11 @@
     @if(Model.Employee.IsDelete)
     {
         <p>Вы подали заявление на увольнение от @Model.Employee.DeleteDate.Value.Date</p>
+        <form method="post" asp-page-handler="Cancel">
+            <div class="form-group">
+                <input type="submit" class="btn btn-danger" value="Отменить" />
+            </div>
+        </form>
     }
     else
     {

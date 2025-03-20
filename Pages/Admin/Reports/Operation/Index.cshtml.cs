@@ -2,8 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
-using OfficeTime.Logic.Integrations;
-using OfficeTime.Logic.Integrations.Models;
+using OfficeTime.Logic.Integrations.YandexTracker;
+using OfficeTime.Logic.Integrations.YandexTracker.Models;
 using OfficeTime.ViewModels;
 
 namespace OfficeTime.Pages.Admin.Reports.Operation

@@ -6,15 +6,15 @@ using Humanizer;
 using MediatR;
 using Microsoft.Extensions.Options;
 using OfficeTime.DBModels;
-using OfficeTime.Logic.Integrations.Cache;
-using OfficeTime.Logic.Integrations.Models;
+using OfficeTime.Logic.Integrations.YandexTracker.Cache;
+using OfficeTime.Logic.Integrations.YandexTracker.Models;
 using System.Collections.Generic;
 
-namespace OfficeTime.Logic.Integrations
+namespace OfficeTime.Logic.Integrations.YandexTracker
 {
     public class Report
     {
-        public string FIO {  get; set; }
+        public string FIO { get; set; }
         public double percent { get; set; }
         public double hours { get; set; }
         public double holidays { get; set; }
@@ -38,7 +38,7 @@ namespace OfficeTime.Logic.Integrations
 
                 return result;
             };
-            var cacheResult = await cache.GetOrCreate(query, async() => await task(query, mediator));
+            var cacheResult = await cache.GetOrCreate(query, async () => await task(query, mediator));
             var holidaydata = context.Holidays.Where(h => h.Datestart >= query.StartIntervalEnding && h.Dateend <= query.EndIntervalEnding);
             var medicaldata = context.Medicals.Where(h => h.Datestart >= query.StartIntervalEnding && h.Dateend <= query.EndIntervalEnding);
 
@@ -83,7 +83,7 @@ namespace OfficeTime.Logic.Integrations
                     totalDays++;
             }
 
-            return totalDays*8;
+            return totalDays * 8;
         }
 
         public double ConvertFromString(string str)
