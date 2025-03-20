@@ -32,7 +32,8 @@ namespace OfficeTime.Logic.Handlers.Employees
                 Datebirth = command.Datebirth,
                 Datestart = command.Datestart,
                 Password = command.Password,
-                Postid = command.PostId
+                Postid = command.PostId,
+                Accessid = command.RoleId
             };
 
             _context.Employees.Add(employee);

@@ -2,9 +2,9 @@
 {
     public enum RoleAccess
     {
-        ADMIN,
-        LEAD,
-        EMPTY,
+        ADMIN = 0,
+        LEAD = 1,
+        EMPTY = 2,
         NONE = -1
     }
 }

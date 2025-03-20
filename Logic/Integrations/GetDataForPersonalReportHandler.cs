@@ -57,7 +57,7 @@ namespace OfficeTime.Logic.Integrations
                 double medicalsHours = holidays.Sum(h => SumHour(h.Datestart, h.Dateend));
                 double trackerHours = tracker.Sum(t => ConvertFromString(t.Spent));
                 double totalHours = SumHour(query.StartIntervalEnding, query.EndIntervalEnding);
-                double percent = trackerHours / (totalHours - (holidaysHours + medicalsHours)) * 100;
+                double percent = trackerHours / (totalHours - (holidaysHours + medicalsHours));
 
                 var report = new Report()
                 {

@@ -52,7 +52,22 @@
                                             }
                                             <li><a class="dropdown-item" asp-page="/Admin/Holidays/Index">Отпуска</a></li>
                                             <li><a class="dropdown-item" asp-page="/Admin/Medicals/Index">Больничные</a></li>
-                                            <li><a class="dropdown-item" asp-page="/Admin/Reports/Holidays/Index">Отчет</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li class="nav-item">
+                                    <div class="dropdown">
+                                        <a class="btn dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Отчетность
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            @if (LoginModel.Role == Mapper.RoleAccess.ADMIN)
+                                            {
+                                                <li><a class="dropdown-item" asp-page="/Admin/Reports/History/Months">Исторический</a></li>
+                                                <li><a class="dropdown-item" asp-page="/Admin/Reports/Holidays/Index">Отпуска</a></li>
+                                            }
+                                            <li><a class="dropdown-item" asp-page="/Admin/Reports/Operation/Index">Оперативный</a></li>
                                         </ul>
                                     </div>
                                 </li>

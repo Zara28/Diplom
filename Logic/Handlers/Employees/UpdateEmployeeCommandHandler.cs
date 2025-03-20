@@ -26,6 +26,7 @@ namespace OfficeTime.Logic.Handlers.Employees
         public override async Task<IHandleResult> HandleAsync(UpdateEmployeeCommand command, CancellationToken cancellationToken = default)
         {
             var post = _context.Employees.Where(e => e.Id ==  command.Id).Select(e => e.Postid).FirstOrDefault();
+            var role = _context.Roles.Where(e => e.Id ==  command.RoleId).Select(e => e.Id).FirstOrDefault();
 
             var employee = new Employee
             {
@@ -36,7 +37,8 @@ namespace OfficeTime.Logic.Handlers.Employees
                 Datebirth = command.Datebirth,
                 Datestart = command.Datestart,
                 Password = command.Password,
-                Postid = command.PostId ?? post
+                Postid = command.PostId ?? post,
+                Accessid = command.RoleId ?? role
             };
 
             _context.Attach(employee).State = EntityState.Modified;
