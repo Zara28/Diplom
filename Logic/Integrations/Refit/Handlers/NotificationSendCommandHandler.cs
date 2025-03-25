@@ -19,7 +19,7 @@ namespace OfficeTime.Logic.Integrations.Refit.Handlers
         private static string _urlNotification;
 
         public NotificationSendCommandHandler(
-                ILogger<CreateEmployeeCommandHandler> logger,
+                ILogger<NotificationSendCommandHandler> logger,
                 IMediator mediator) : base(logger, mediator)
         {
         }

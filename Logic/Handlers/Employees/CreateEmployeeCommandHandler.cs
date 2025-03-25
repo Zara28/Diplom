@@ -2,8 +2,11 @@
 using Goldev.Core.MediatR.Handlers;
 using Goldev.Core.MediatR.Models;
 using MediatR;
+using Newtonsoft.Json;
 using OfficeTime.DBModels;
+using OfficeTime.GenerationModels;
 using OfficeTime.Logic.Commands;
+using OfficeTime.Logic.Integrations.Refit.Commands;
 using System.Net;
 
 namespace OfficeTime.Logic.Handlers.Employees
@@ -12,6 +15,8 @@ namespace OfficeTime.Logic.Handlers.Employees
     {
         private readonly diplom_adminkaContext _context;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
+
         public CreateEmployeeCommandHandler(
                 ILogger<CreateEmployeeCommandHandler> logger,
                 IMediator mediator,
@@ -20,6 +25,7 @@ namespace OfficeTime.Logic.Handlers.Employees
         {
             _context = context;
             _mapper = mapper;
+            _mediator = mediator;
         }
         public override async Task<IHandleResult> HandleAsync(CreateEmployeeCommand command, CancellationToken cancellationToken = default)
         {
@@ -39,6 +45,27 @@ namespace OfficeTime.Logic.Handlers.Employees
             _context.Employees.Add(employee);
 
             _context.SaveChanges();
+
+            var post = _context.Posts.FirstOrDefault(p => p.Id == command.PostId);
+
+            //todo убрать в константы
+            var model = new AddEmployee
+            {
+                FIO = command.Fio,
+                NameCompany = "Малое предприятие",
+                Post = post.Name,
+                Cost = post.Rate,
+                FIODirector = ""
+            };
+
+            await _mediator.Send(new DocumentSendCommand
+            {
+                InputModel = new Integrations.Refit.Intefaces.InputModel
+                {
+                    TypeEnum = TypeEnum.AddEmployee,
+                    Payload = (Newtonsoft.Json.Linq.JObject)JsonConvert.SerializeObject(model)
+                }
+            });
 
             return await Ok();
         }
