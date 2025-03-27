@@ -3,6 +3,7 @@ using Goldev.Core.MediatR.Handlers;
 using Goldev.Core.MediatR.Models;
 using MediatR;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OfficeTime.DBModels;
 using OfficeTime.GenerationModels;
 using OfficeTime.Logic.Commands;
@@ -55,7 +56,7 @@ namespace OfficeTime.Logic.Handlers.Employees
                 NameCompany = "Малое предприятие",
                 Post = post.Name,
                 Cost = post.Rate,
-                FIODirector = ""
+                FIODirector = "123"
             };
 
             await _mediator.Send(new DocumentSendCommand
@@ -63,7 +64,7 @@ namespace OfficeTime.Logic.Handlers.Employees
                 InputModel = new Integrations.Refit.Intefaces.InputModel
                 {
                     TypeEnum = TypeEnum.AddEmployee,
-                    Payload = (Newtonsoft.Json.Linq.JObject)JsonConvert.SerializeObject(model)
+                    Payload = JsonConvert.SerializeObject(model)
                 }
             });
 

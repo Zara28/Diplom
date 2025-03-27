@@ -8,6 +8,7 @@ using OfficeTime.Logic.Integrations.YandexTracker.Cache;
 using OfficeTime.Logic.Integrations.YandexTracker.Models;
 using OfficeTime.Mapper;
 using Refit;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddSingleton<MemoryCache<ResponseModel<List<YandexTask>>>>();
 builder.Services.AddMediatR<Program>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
+builder.Services.AddControllers().AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())); ;
 builder.Configuration.AddConstants();
 
 builder.Services.ConfigureWithEnv<YandexTrackerConfiguration>(builder.Configuration);

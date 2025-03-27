@@ -13,7 +13,7 @@ namespace OfficeTime.Logic.Integrations.Refit.Handlers
     public class DocumentSendCommandHandler : AbstractCommandHandler<DocumentSendCommand>
     {
         [Constant(BlockName = "Constants")]
-        private static string _urlDocument;
+        private static string _urlGenerate;
 
         public DocumentSendCommandHandler(
                 ILogger<DocumentSendCommandHandler> logger,
@@ -24,9 +24,13 @@ namespace OfficeTime.Logic.Integrations.Refit.Handlers
         {
             try
             {
-                var docApi = RestService.For<IGenerateDocument>(_urlDocument);
+                var docApi = RestService.For<IGenerateDocument>(_urlGenerate);
 
-                await docApi.CreateDocument(command.InputModel);
+                await docApi.CreateDocument(new InputModel
+                {
+                    Payload = command.InputModel.Payload,
+                    TypeEnum = command.InputModel.TypeEnum,
+                });
 
                 return await Ok();
             }
