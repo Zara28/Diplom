@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Goldev.Core.Attributes;
 using Goldev.Core.MediatR.Handlers;
 using Goldev.Core.MediatR.Models;
 using MediatR;
@@ -8,15 +9,25 @@ using OfficeTime.DBModels;
 using OfficeTime.GenerationModels;
 using OfficeTime.Logic.Commands;
 using OfficeTime.Logic.Integrations.Refit.Commands;
+using OfficeTime.Logic.Integrations.Refit.Intefaces;
 using OfficeTime.ViewModels;
 using System.Net;
 
 namespace OfficeTime.Logic.Handlers.Employees
 {
+    [TrackedType]
     public class DeleteEmployeeCommandHandler : AbstractCommandHandler<DeleteEmployeeCommand>
     {
         private readonly diplom_adminkaContext _context;
         private readonly IMapper _mapper;
+
+        [Constant(BlockName = "Constants")]
+        private static string _telegramMain;
+        [Constant(BlockName = "Constants")]
+        private static string _fIODirector;
+        [Constant(BlockName = "Constants")]
+        private static string _companyName;
+
         public DeleteEmployeeCommandHandler(
                 ILogger<DeleteEmployeeCommandHandler> logger,
                 IMediator mediator,
@@ -38,13 +49,13 @@ namespace OfficeTime.Logic.Handlers.Employees
 
                 var model = new Dissmiss
                 {
-                    NameComppany = "Малое предприятие",
+                    NameComppany = _companyName,
                     DateCreate = DateTime.Now,
                     Date = (DateTime)(diss == null ? DateTime.Now : diss.Date),
                     FIO = employee.Fio,
                     Post = _context.Posts.FirstOrDefault(p => p.Id == employee.Postid).Name,
                     DateReport = (diss == null ? DateTime.Now : diss.Date).ToString(),
-                    FIODirector = "FIODirector"
+                    FIODirector = _fIODirector
                 };
 
                 await _mediator.Send(new DocumentSendCommand
@@ -52,8 +63,15 @@ namespace OfficeTime.Logic.Handlers.Employees
                     InputModel = new Integrations.Refit.Intefaces.InputModel
                     {
                         TypeEnum = TypeEnum.Dissmiss,
-                        Payload = JsonConvert.SerializeObject(model)
+                        Payload = JsonConvert.SerializeObject(model),
+                        TelegramId = _telegramMain
                     }
+                });
+
+                await _mediator.Send(new TelegramMessage
+                {
+                    ChatId = Convert.ToInt64(employee.Telegram),
+                    Message = "Вы были удалены из системы"
                 });
 
                 return await Ok();

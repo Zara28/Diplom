@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Goldev.Core.Attributes;
 using Goldev.Core.MediatR.Handlers;
 using Goldev.Core.MediatR.Models;
 using MediatR;
@@ -8,15 +9,24 @@ using OfficeTime.DBModels;
 using OfficeTime.GenerationModels;
 using OfficeTime.Logic.Commands;
 using OfficeTime.Logic.Integrations.Refit.Commands;
+using OfficeTime.Logic.Integrations.Refit.Intefaces;
 using System.Net;
 
 namespace OfficeTime.Logic.Handlers.Employees
 {
+    [TrackedType]
     public class CreateEmployeeCommandHandler : AbstractCommandHandler<CreateEmployeeCommand>
     {
         private readonly diplom_adminkaContext _context;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+
+        [Constant(BlockName ="Constants")]
+        private static string _telegramMain;
+        [Constant(BlockName = "Constants")]
+        private static string _fIODirector;
+        [Constant(BlockName = "Constants")]
+        private static string _companyName;
 
         public CreateEmployeeCommandHandler(
                 ILogger<CreateEmployeeCommandHandler> logger,
@@ -53,10 +63,10 @@ namespace OfficeTime.Logic.Handlers.Employees
             var model = new AddEmployee
             {
                 FIO = command.Fio,
-                NameCompany = "Малое предприятие",
+                NameCompany = _companyName,
                 Post = post.Name,
                 Cost = post.Rate,
-                FIODirector = "123"
+                FIODirector = _fIODirector
             };
 
             await _mediator.Send(new DocumentSendCommand
@@ -65,8 +75,14 @@ namespace OfficeTime.Logic.Handlers.Employees
                 {
                     TypeEnum = TypeEnum.AddEmployee,
                     Payload = JsonConvert.SerializeObject(model),
-                    TelegramId = employee.Telegram,
+                    TelegramId = _telegramMain,
                 }
+            });
+
+            await _mediator.Send(new TelegramMessage
+            {
+                ChatId = Convert.ToInt64(employee.Telegram),
+                Message = "В отдел кадров был отправлен приказ о вашем приеме на работу"
             });
 
             return await Ok();

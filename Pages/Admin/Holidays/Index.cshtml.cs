@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Goldev.Core.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.GenerationModels;
 using OfficeTime.Logic.Commands;
 using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
@@ -50,5 +52,23 @@ namespace OfficeTime.Pages.Admin.Holidays
 
             return RedirectToPage("./Index");
         }
+        public async Task<IActionResult> OnPostCreateReport()
+        {
+            await mediator.Send(new GenerateHolidayCommand
+            {
+                Year = false
+            });
+            return RedirectToPage("./Index");
+        }
+
+        public async Task<IActionResult> OnPostCreateYear()
+        {
+            await mediator.Send(new GenerateHolidayCommand
+            {
+                Year = true
+            });
+            return RedirectToPage("./Index");
+        }
+
     }
 }

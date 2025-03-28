@@ -20,5 +20,7 @@ namespace OfficeTime.Logic.Integrations.YandexTracker
         public string UrlGenerate { get; set; }
 
         public string TelegramMain { get; set; }
+        public string FIODirector { get; set; }
+        public string CompanyName { get; set; }
     }
 }

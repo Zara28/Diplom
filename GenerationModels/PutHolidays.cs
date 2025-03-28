@@ -2,7 +2,7 @@
 {
     public class PutHolidays
     {
-        public string NameComppany { get; set; }
+        public string NameCompany { get; set; }
         public string FIODirector { get; set; }
         public List<PutHolidaysRow> Rows { get; set; }
     }
