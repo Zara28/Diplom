@@ -64,7 +64,8 @@ namespace OfficeTime.Logic.Handlers.Employees
                 InputModel = new Integrations.Refit.Intefaces.InputModel
                 {
                     TypeEnum = TypeEnum.AddEmployee,
-                    Payload = JsonConvert.SerializeObject(model)
+                    Payload = JsonConvert.SerializeObject(model),
+                    TelegramId = employee.Telegram,
                 }
             });
 

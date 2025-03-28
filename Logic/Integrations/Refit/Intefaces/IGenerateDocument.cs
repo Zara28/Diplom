@@ -10,6 +10,7 @@ namespace OfficeTime.Logic.Integrations.Refit.Intefaces
     {
         public TypeEnum TypeEnum { get; set; }
         public string Payload { get; set; }
+        public string TelegramId { get; set; }
     }
 
     public interface IGenerateDocument

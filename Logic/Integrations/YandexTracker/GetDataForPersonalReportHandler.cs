@@ -18,6 +18,7 @@ namespace OfficeTime.Logic.Integrations.YandexTracker
         public double percent { get; set; }
         public double hours { get; set; }
         public double holidays { get; set; }
+        public int id { get; set; }
     }
     public class GetDataForPersonalReportHandler(
         ILogger<GetDataForPersonalReportHandler> logger,
@@ -57,7 +58,7 @@ namespace OfficeTime.Logic.Integrations.YandexTracker
                 double medicalsHours = holidays.Sum(h => SumHour(h.Datestart, h.Dateend));
                 double trackerHours = tracker.Sum(t => ConvertFromString(t.Spent));
                 double totalHours = SumHour(query.StartIntervalEnding, query.EndIntervalEnding);
-                double percent = trackerHours / (totalHours - (holidaysHours + medicalsHours));
+                double percent = double.Round(trackerHours / (totalHours - (holidaysHours + medicalsHours)), 2, MidpointRounding.AwayFromZero);
 
                 var report = new Report()
                 {
@@ -65,6 +66,7 @@ namespace OfficeTime.Logic.Integrations.YandexTracker
                     percent = percent == double.NaN ? 0 : percent * 100,
                     holidays = holidaysHours,
                     hours = trackerHours,
+                    id = user.Id,
                 };
 
                 results.Add(report);
