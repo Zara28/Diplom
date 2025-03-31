@@ -42,7 +42,7 @@ namespace OfficeTime.Logic.Handlers.Generation
             DateTime dateStart;
             DateTime dateEnd;
 
-            if(command.Year)
+            if(command.Type == TypeEnum.PutHolidays)
             {
                 dateStart = new DateTime(date.Year, 1, 1);
                 dateEnd = dateStart.AddYears(1).AddDays(-1);
@@ -59,11 +59,15 @@ namespace OfficeTime.Logic.Handlers.Generation
 
             var emp = _context.Employees.Include(e => e.Post);
 
-            PutHolidays model = new()
+            string data;
+
+            if (command.Type == TypeEnum.PutHolidays)
             {
-                NameCompany = _companyName,
-                FIODirector = _fIODirector,
-                Rows = holidays
+                var model = new PutHolidays()
+                {
+                    NameCompany = _companyName,
+                    FIODirector = _fIODirector,
+                    Rows = holidays
                         .Select(h => new PutHolidaysRow
                         {
                             FIO = emp.FirstOrDefault(e => e.Id == h.Empid).Fio,
@@ -75,15 +79,37 @@ namespace OfficeTime.Logic.Handlers.Generation
                             DateStart = h.Datestart.Value,
                             DateEnd = h.Dateend.Value
                         }).ToList()
-            };
+                };
+
+                data = JsonConvert.SerializeObject(model);
+            }
+            else
+            {
+                var model = new HolidaysT7
+                {
+                    NameCompany = _companyName,
+                    FIODirector = _fIODirector,
+                    Holidays = holidays
+                        .Select(h => new HolidayRow
+                        {
+                            FIO = emp.FirstOrDefault(e => e.Id == h.Empid).Fio,
+                            Number = emp.FirstOrDefault(e => e.Id == h.Empid).Id.ToString(),
+                            Post = emp.FirstOrDefault(e => e.Id == h.Empid).Post.Name,
+                            CountDays = Convert.ToInt32((h.Dateend.Value - h.Datestart.Value).TotalDays),
+                            DateStart = h.Datestart.Value,
+                        }).ToList()
+                };
+
+                data = JsonConvert.SerializeObject(model);
+            }
 
             await _mediator.Send(new DocumentSendCommand
             {
                 InputModel = new Integrations.Refit.Intefaces.InputModel
                 {
-                    Payload = JsonConvert.SerializeObject(model),
+                    Payload = data,
                     TelegramId = _telegramMain,
-                    TypeEnum = TypeEnum.PutHolidays
+                    TypeEnum = command.Type
                 }
             });
 

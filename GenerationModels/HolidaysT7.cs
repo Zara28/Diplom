@@ -2,7 +2,7 @@
 {
     public class HolidaysT7
     {
-        public string NameComppany { get; set; }
+        public string NameCompany { get; set; }
         public string FIODirector {  get; set; }
 
         public List<HolidayRow> Holidays { get; set; }

@@ -16,6 +16,6 @@ namespace OfficeTime.Logic.Integrations.Refit.Intefaces
     public interface IGenerateDocument
     {
         [Post("/Generate")]
-        Task CreateDocument(InputModel model);
+        Task CreateDocument([FromBody]InputModel model);
     }
 }

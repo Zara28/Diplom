@@ -56,7 +56,7 @@ namespace OfficeTime.Pages.Admin.Holidays
         {
             await mediator.Send(new GenerateHolidayCommand
             {
-                Year = false
+                Type = TypeEnum.PutHolidays
             });
             return RedirectToPage("./Index");
         }
@@ -65,7 +65,7 @@ namespace OfficeTime.Pages.Admin.Holidays
         {
             await mediator.Send(new GenerateHolidayCommand
             {
-                Year = true
+                Type = TypeEnum.HolidaysT7
             });
             return RedirectToPage("./Index");
         }
