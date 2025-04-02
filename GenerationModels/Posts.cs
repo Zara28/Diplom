@@ -2,11 +2,14 @@
 {
     public class Posts
     {
-        public string NameComppany { get; set; }
+        public string NameCompany { get; set; }
         public DateTime DateStart {  get; set; }
         public DateTime DateEnd { get; set; }
 
-        public List<PostsRow> PostsRow { get; set; }
+        public PostsRow[] PostsRow { get; set; }
+
+        public int SumCost { get; set; }
+        public int SumCount { get; set; }
     }
 
     public class PostsRow

@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
+using OfficeTime.GenerationModels;
+using OfficeTime.Logic.Commands;
 using OfficeTime.Logic.Queries;
 using OfficeTime.ViewModels;
 
@@ -21,6 +23,14 @@ namespace OfficeTime.Pages.Admin.Posts
         {
             var result = await mediator.Send(new GetPostQuery());
             PostView = result.Response;
+        }
+
+        public async Task<IActionResult> OnPostCreateReport()
+        {
+            await mediator.Send(new GeneratePostReportCommand
+            {
+            });
+            return RedirectToPage("./Index");
         }
     }
 }

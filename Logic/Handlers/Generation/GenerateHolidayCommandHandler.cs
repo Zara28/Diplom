@@ -78,7 +78,7 @@ namespace OfficeTime.Logic.Handlers.Generation
                             DateStartWork = emp.FirstOrDefault(e => e.Id == h.Empid).Datestart ?? DateTime.Now,
                             DateStart = h.Datestart.Value,
                             DateEnd = h.Dateend.Value
-                        }).ToList()
+                        }).ToArray()
                 };
 
                 data = JsonConvert.SerializeObject(model);
@@ -97,7 +97,7 @@ namespace OfficeTime.Logic.Handlers.Generation
                             Post = emp.FirstOrDefault(e => e.Id == h.Empid).Post.Name,
                             CountDays = Convert.ToInt32((h.Dateend.Value - h.Datestart.Value).TotalDays),
                             DateStart = h.Datestart.Value,
-                        }).ToList()
+                        }).ToArray()
                 };
 
                 data = JsonConvert.SerializeObject(model);

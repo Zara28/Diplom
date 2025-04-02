@@ -5,6 +5,7 @@ using MediatR;
 using OfficeTime.DBModels;
 using OfficeTime.Logic.Commands;
 using OfficeTime.Logic.Handlers.Holidays;
+using OfficeTime.Logic.Integrations.Refit.Commands;
 
 namespace OfficeTime.Logic.Handlers.Medicals
 {
@@ -12,6 +13,7 @@ namespace OfficeTime.Logic.Handlers.Medicals
     {
         private readonly diplom_adminkaContext _context;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
         public CreateMedicalCommandHandler(
                 ILogger<CreateMedicalCommandHandler> logger,
                 IMediator mediator,
@@ -20,9 +22,21 @@ namespace OfficeTime.Logic.Handlers.Medicals
         {
             _context = context;
             _mapper = mapper;
+            _mediator = mediator;
         }
         public override async Task<IHandleResult> HandleAsync(CreateMedicalCommand command, CancellationToken cancellationToken = default)
         {
+            var holidays = _context.Holidays.Where(h => h.Empid == command.EmpId).ToList();
+
+            if (holidays.Any(h => h.Datestart >= command.DateStart || h.Dateend <= command.DateEnd))
+            {
+                await _mediator.Send(new NotificationSendCommand
+                {
+                    Message = $"Ваш больничный совпал с отпуском. Обсудите перенос отпуска за эти дни с руководством",
+                    Telegram = _context.Employees.FirstOrDefault(f => f.Id == command.EmpId).Telegram
+                });
+            }
+
             var medical = new Medical
             {
                 Datestart = command.DateStart,

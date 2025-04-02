@@ -5,7 +5,7 @@
         public string NameCompany { get; set; }
         public string FIODirector {  get; set; }
 
-        public List<HolidayRow> Holidays { get; set; }
+        public HolidayRow[] Holidays { get; set; }
     }
 
     public class HolidayRow
