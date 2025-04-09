@@ -3,17 +3,17 @@
 @model DetailsLKModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Информация";
 }
 
-<h1>Details</h1>
+<h1>Информация о сотруднике</h1>
 
 <div>
-    <h4>Employee</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Employee.Fio)
+            @* @Html.DisplayNameFor(model => model.Employee.Fio) *@
+            ФИО
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Employee.Fio)
@@ -31,19 +31,22 @@
             @Html.DisplayFor(model => model.Employee.Yandex)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Employee.Datebirth)
+            @* @Html.DisplayNameFor(model => model.Employee.Datebirth) *@
+            Дата рождения
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Employee.Datebirth)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Employee.Datestart)
+            @* @Html.DisplayNameFor(model => model.Employee.Datestart) *@
+            Дата выхода
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Employee.Datestart)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Employee.Post)
+            @* @Html.DisplayNameFor(model => model.Employee.Post) *@
+            Должность
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Employee.Post)
@@ -73,5 +76,5 @@
     
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Employee.Id">Edit</a>
+    <a asp-page="./Edit" asp-route-id="@Model.Employee.Id">Изменить</a>
 </div>

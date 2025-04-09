@@ -2,28 +2,35 @@
 @model OfficeTime.Pages.Admin.Posts.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Должности";
 }
 
-<h1>Index</h1>
+<h1>Должности</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create">Создать новую должность</a>
 </p>
-<form method="post">
-    <button type="submit" class="btn btn-light" asp-page-handler="CreateReport">Сгенерировать штатное расписание на полгода</button>
-</form>
+@if (LoginModel.Role == Mapper.RoleAccess.ADMIN)
+{
+    <form method="post">
+        <button type="submit" class="btn btn-light" asp-page-handler="CreateReport">Сгенерировать штатное расписание на полгода</button>
+    </form>
+}
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PostView[0].Name)
+                @* @Html.DisplayNameFor(model => model.PostView[0].Name) *@
+                Название
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PostView[0].Rate)
+                @* @Html.DisplayNameFor(model => model.PostView[0].Rate) *@
+                Ставка
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PostView[0].Count)
+                @* @Html.DisplayNameFor(model => model.PostView[0].Count) *@
+                Количество сотрудников
             </th>
             <th></th>
         </tr>
@@ -41,9 +48,9 @@
                 @Html.DisplayFor(modelItem => item.Count)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Информация</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
         </tr>
 }

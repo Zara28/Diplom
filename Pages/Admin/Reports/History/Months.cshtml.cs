@@ -1,11 +1,14 @@
+using Goldev.Core.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using OfficeTime.Logic.Integrations.YandexTracker.Cache;
 using OfficeTime.Logic.Integrations.YandexTracker.Models;
 
 namespace OfficeTime.Pages.Admin.Reports.History
 {
-    public class MonthsModel(IMediator mediator) : PageModel
+    public class MonthsModel(IMediator mediator,
+        MemoryCache<ResponseModel<List<YandexTask>>> cache) : PageModel
     {
         public class MonthsReport
         {
@@ -16,6 +19,7 @@ namespace OfficeTime.Pages.Admin.Reports.History
 
         public async Task<IActionResult> OnGetAsync(int months = 3)
         {
+            await cache.Refresh();
             for (int i = (months - 1)*(-1); i <= 0; i++)
             {
                 var data = await mediator.Send(new LoadADataReportCommand

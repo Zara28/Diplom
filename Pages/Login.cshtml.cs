@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis.Elfie.Extensions;
 using OfficeTime.Logic.Queries;
 using OfficeTime.Mapper;
 
@@ -23,7 +24,7 @@ namespace OfficeTime.Pages
             var result = await mediator.Send(new GetEmployeesQuery
             {
                 Name = login,
-                Password = password
+                Password = Convert.ToBase64String(password.ToSHA256())
             });
 
             var emp = result.Response.FirstOrDefault();

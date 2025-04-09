@@ -2,59 +2,67 @@
 @model OfficeTime.Pages.Admin.Holidays.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Информация";
 }
 
-<h1>Details</h1>
+<h1>Подробности об отпуске</h1>
 
 <div>
-    <h4>HolidayView</h4>
+    <h4>Отпуск</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HolidayView.Datestart)
+            @* @Html.DisplayNameFor(model => model.HolidayView.Datestart) *@
+            Дата начала
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HolidayView.Datestart)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HolidayView.Dateend)
+            @* @Html.DisplayNameFor(model => model.HolidayView.Dateend) *@
+            Дата окончания
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HolidayView.Dateend)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HolidayView.Pay)
+            @* @Html.DisplayNameFor(model => model.HolidayView.Pay) *@
+            Вид
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HolidayView.Pay)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HolidayView.Isleadapp)
+            @* @Html.DisplayNameFor(model => model.HolidayView.Isleadapp) *@
+            Подтвержден лидом
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HolidayView.Isleadapp)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HolidayView.Isdirectorapp)
+            @* @Html.DisplayNameFor(model => model.HolidayView.Isdirectorapp) *@
+            Подтвержден руководителем
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HolidayView.Isdirectorapp)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HolidayView.Datecreate)
+            @* @Html.DisplayNameFor(model => model.HolidayView.Datecreate) *@
+            ДАта создания
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HolidayView.Datecreate)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HolidayView.Dateapp)
+            @* @Html.DisplayNameFor(model => model.HolidayView.Dateapp) *@
+            Дата подтверждения
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HolidayView.Dateapp)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HolidayView.Emp)
+            @* @Html.DisplayNameFor(model => model.HolidayView.Emp) *@
+            Сотрудник
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HolidayView.Emp)

@@ -2,12 +2,11 @@
 @model OfficeTime.Pages.Admin.Medicals.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактировать";
 }
 
-<h1>Edit</h1>
+<h1>Редактировать запись о больничном</h1>
 
-<h4>MedicalView</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,34 +14,34 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="MedicalView.Id" />
             <div class="form-group">
-                <label asp-for="MedicalView.Datestart" class="control-label"></label>
+                <label asp-for="MedicalView.Datestart" class="control-label">Дата начала</label>
                 <input asp-for="MedicalView.Datestart" class="form-control" />
                 <span asp-validation-for="MedicalView.Datestart" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MedicalView.Dateend" class="control-label"></label>
+                <label asp-for="MedicalView.Dateend" class="control-label">Дата окончания</label>
                 <input asp-for="MedicalView.Dateend" class="form-control" />
                 <span asp-validation-for="MedicalView.Dateend" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MedicalView.Datecreate" class="control-label"></label>
+                <label asp-for="MedicalView.Datecreate" class="control-label">Дата создания</label>
                 <input asp-for="MedicalView.Datecreate" class="form-control" />
                 <span asp-validation-for="MedicalView.Datecreate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MedicalView.Emp" class="control-label"></label>
+                <label asp-for="MedicalView.Emp" class="control-label">Сотрудник</label>
                 <input asp-for="MedicalView.Emp" class="form-control" />
                 <span asp-validation-for="MedicalView.Emp" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">Вернуться к общему списку</a>
 </div>
 
 @section Scripts {

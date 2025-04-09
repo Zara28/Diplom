@@ -3,48 +3,50 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<body style="background-image:url(https://w.wallhaven.cc/full/w8/wallhaven-w8kv2r.jpg)">
+    <div class="text-center">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Мои отпуска на текущий месяц</h5>
+                        <ul class="list-group">
+                            @foreach (var holiday in Model.Holidays)
+                            {
+                                <li class="list-group-item">@(holiday.Datestart.Value.ToShortDateString()) по @(holiday.Dateend.Value.ToShortDateString())</li>
+                            }
+                        </ul>
 
-<div class="text-center" style="background-image:url(https://w.wallhaven.cc/full/w8/wallhaven-w8kv2r.jpg)">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Мои отпуска на текущий месяц</h5>
-                    <ul class="list-group">
-                        @foreach (var holiday in Model.Holidays)
-                        {
-                            <li class="list-group-item">@(holiday.Datestart.Value.ToShortDateString()) по @(holiday.Dateend.Value.ToShortDateString())</li>
-                        }
-                    </ul>
-                    
-                    <a href="/LK/Holidays/Index" class="btn btn-primary">Посмотреть мой график</a>
+                        <a href="/LK/Holidays/Index" class="btn btn-primary">Посмотреть мой график</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Мои больничные за текущий месяц</h5>
+                        <ul class="list-group">
+                            @foreach (var medical in Model.Medicals)
+                            {
+                                <li class="list-group-item">@(medical.Datestart.Value.ToShortDateString()) по @(medical.Dateend.Value.ToShortDateString())</li>
+                            }
+                        </ul>
+                        <a href="/LK/Medicals/Index" class="btn btn-primary">Посмотреть мои больничные</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Мои показатели за текущий месяц</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">Процент: @Model.Report.percent</li>
+                            <li class="list-group-item">Кол-во часов: @Model.Report.hours</li>
+
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Мои больничные за текущий месяц</h5>
-                    <ul class="list-group">
-                        @foreach (var medical in Model.Medicals)
-                        {
-                            <li class="list-group-item">@(medical.Datestart.Value.ToShortDateString()) по @(medical.Dateend.Value.ToShortDateString())</li>
-                        }
-                    </ul>
-                    <a href="/LK/Medicals/Index" class="btn btn-primary">Посмотреть мои больничные</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Мои показатели за текущий месяц</h5>
-                    <ul class="list-group">
-                     <li class="list-group-item">Процент: @Model.Report.percent</li>
-                     <li class="list-group-item">Кол-во часов: @Model.Report.hours</li>
-                        
-                    </ul>
-                </div>
-            </div>
-        </div>
-</div>
+
+    </body>

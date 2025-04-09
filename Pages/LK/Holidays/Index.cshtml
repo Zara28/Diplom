@@ -3,40 +3,48 @@
 @model IndexLKModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Отпуска";
 }
 
-<h1>Index</h1>
+<h1>Мой график отпусков</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create">Созать новую запись</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Datestart)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Datestart) *@
+                Дата начала
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Dateend)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Dateend) *@
+                Дата окончания
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Pay)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Pay) *@
+                Тип
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Isleadapp)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Isleadapp) *@
+                Подтверждение лидом
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Isdirectorapp)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Isdirectorapp) *@
+                Подтверждение руководителем
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Datecreate)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Datecreate) *@
+                Дата создания
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Dateapp)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Dateapp) *@
+                Дата подтверждения
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Emp)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Emp) *@
+                Сотрудник
             </th>
             <th></th>
         </tr>
@@ -91,9 +99,9 @@
                 @Html.DisplayFor(modelItem => item.Emp)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Информация</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
         </tr>
 }

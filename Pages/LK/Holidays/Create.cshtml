@@ -2,41 +2,40 @@
 @model OfficeTime.Pages.Admin.Holidays.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Создать";
 }
 
-<h1>Create</h1>
+<h1>Создать новую запись об отпуске</h1>
 
-<h4>HolidayView</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="HolidayView.Datestart" class="control-label"></label>
+                <label asp-for="HolidayView.Datestart" class="control-label">Дата начала</label>
                 <input asp-for="HolidayView.Datestart" class="form-control" />
                 <span asp-validation-for="HolidayView.Datestart" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HolidayView.Dateend" class="control-label"></label>
+                <label asp-for="HolidayView.Dateend" class="control-label">Дата окончания</label>
                 <input asp-for="HolidayView.Dateend" class="form-control" />
                 <span asp-validation-for="HolidayView.Dateend" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HolidayView.Pay" class="control-label"></label>
+                <label asp-for="HolidayView.Pay" class="control-label">Тип</label>
                 <input type="checkbox" asp-for="HolidayView.Pay" checked="" />
                 <span asp-validation-for="HolidayView.Pay" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index">Вернуться к общему списку</a>
 </div>
 
 @section Scripts {

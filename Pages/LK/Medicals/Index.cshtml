@@ -3,28 +3,32 @@
 @model IndexLKModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Больничные";
 }
 
-<h1>Index</h1>
+<h1>Мои больничные</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create">Создать новую запись</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MedicalView[0].Datestart)
+                @* @Html.DisplayNameFor(model => model.MedicalView[0].Datestart) *@
+                Дата начала
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MedicalView[0].Dateend)
+                @* @Html.DisplayNameFor(model => model.MedicalView[0].Dateend) *@
+                Дата окончания
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MedicalView[0].Datecreate)
+                @* @Html.DisplayNameFor(model => model.MedicalView[0].Datecreate) *@
+                Дата создания
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MedicalView[0].Emp)
+                @* @Html.DisplayNameFor(model => model.MedicalView[0].Emp) *@
+                Сотрудник
             </th>
             <th></th>
         </tr>
@@ -45,8 +49,8 @@
                 @Html.DisplayFor(modelItem => item.Emp)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
         </tr>
 }

@@ -2,13 +2,12 @@
 @model OfficeTime.Pages.Admin.Posts.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Информация о должности";
 }
 
-<h1>Details</h1>
+<h1>Информация о должности</h1>
 
 <div>
-    <h4>PostView</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -32,6 +31,6 @@
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.PostView.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Edit" asp-route-id="@Model.PostView.Id">Изменить</a> |
+    <a asp-page="./Index">Вернуться к общему списку</a>
 </div>

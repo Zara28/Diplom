@@ -85,9 +85,9 @@ namespace OfficeTime.Logic.Integrations.YandexTracker
         {
             List<string> conditions = new()
             {
-                AddParameter("status", filter.Statuses),
-                AddParameter("assignee", filter.UserId),
-                AddParameter("\\\"Start Date\\\"", filter.StartIntervalEnding, filter.EndIntervalEnding)
+                //AddParameter("status", filter.Statuses),
+                //AddParameter("assignee", filter.UserId),
+                //AddParameter("\\\"Start Date\\\"", filter.StartIntervalEnding, filter.EndIntervalEnding)
             };
 
             return Task.FromResult($"{{\"query\":\"{CreateResultQuery(conditions)}\"}}");

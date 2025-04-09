@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
 using OfficeTime.Logic.Commands;
@@ -67,7 +68,7 @@ namespace OfficeTime.Pages.Admin.Employees
                 Yandex = Employee.Yandex,
                 Datebirth = Employee.Datebirth,
                 Datestart = Employee.Datestart,
-                Password = Employee.Password,
+                Password = Convert.ToBase64String(Employee.Password.ToSHA256()),
                 PostId = Convert.ToInt32(Employee.Post),
                 RoleId = Convert.ToInt32(Employee.Role),
             });

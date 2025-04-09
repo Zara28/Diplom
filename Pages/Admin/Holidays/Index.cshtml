@@ -2,55 +2,67 @@
 @model OfficeTime.Pages.Admin.Holidays.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "График отпусков";
 }
 
-<h1>Index</h1>
+<h1>График отпусков</h1>
 
 <p>
     <a asp-page="Create">Создать новый отпуск</a>
 </p>
-<p>
-    <form method="post">
-        <button type="submit" class="btn btn-light" asp-page-handler="CreateReport">Сгенерировать приказ об отпусках на месяц</button>
-    </form>
-    <form method="post">
-        <button type="submit" class="btn btn-light" asp-page-handler="CreateYear">Сгенерировать график отпусков на год</button>
-    </form>
+@if(LoginModel.Role==Mapper.RoleAccess.ADMIN)
+{
+    <p>
+        <form method="post">
+            <button type="submit" class="btn btn-light" asp-page-handler="CreateReport">Сгенерировать приказ об отпусках на месяц</button>
+        </form>
+        <form method="post">
+            <button type="submit" class="btn btn-light" asp-page-handler="CreateYear">Сгенерировать график отпусков на год</button>
+        </form>
 
-</p>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Datestart)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Datestart) *@
+                Дата начала
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Dateend)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Dateend) *@
+                Дата окончания
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Pay)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Pay) *@
+                Тип
             </th>
             @if(LoginModel.Role == Mapper.RoleAccess.LEAD)
             {
                 <th>
-                    @Html.DisplayNameFor(model => model.HolidayView[0].Isleadapp)
+                    @* @Html.DisplayNameFor(model => model.HolidayView[0].Isleadapp) *@
+                    Подтверждение лидом
                 </th>
             }
             @if (LoginModel.Role == Mapper.RoleAccess.ADMIN)
             {
                 <th>
-                    @Html.DisplayNameFor(model => model.HolidayView[0].Isdirectorapp)
+                    @* @Html.DisplayNameFor(model => model.HolidayView[0].Isdirectorapp) *@
+                    Подтверждение руководителем
                 </th>
             }
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Datecreate)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Datecreate) *@
+                Дата создания
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Dateapp)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Dateapp) *@
+                Дата подтверждения
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayView[0].Emp)
+                @* @Html.DisplayNameFor(model => model.HolidayView[0].Emp) *@
+                Сотрудник
             </th>
             <th></th>
         </tr>

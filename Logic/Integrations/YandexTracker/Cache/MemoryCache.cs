@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Concurrent;
+using System.ComponentModel;
 
 namespace OfficeTime.Logic.Integrations.YandexTracker.Cache
 {
@@ -7,6 +8,11 @@ namespace OfficeTime.Logic.Integrations.YandexTracker.Cache
     {
         private MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
         private ConcurrentDictionary<object, SemaphoreSlim> _locks = new ConcurrentDictionary<object, SemaphoreSlim>();
+
+        public async Task Refresh()
+        {
+            _cache.Clear();
+        }
 
         public async Task<TItem> GetOrCreate(object key, Func<Task<TItem>> createItem)
         {

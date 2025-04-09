@@ -2,36 +2,36 @@
 @model OfficeTime.Pages.Admin.Posts.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Создание новой должности";
 }
 
-<h1>Create</h1>
+<h1>Создать новой должности</h1>
 
-<h4>PostView</h4>
+<h4>Новая должность</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="PostView.Name" class="control-label"></label>
+                <label asp-for="PostView.Name" class="control-label">Название</label>
                 <input asp-for="PostView.Name" class="form-control" />
                 <span asp-validation-for="PostView.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PostView.Rate" class="control-label"></label>
+                <label asp-for="PostView.Rate" class="control-label">Ставка</label>
                 <input asp-for="PostView.Rate" class="form-control" />
                 <span asp-validation-for="PostView.Rate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index">Вернуться к общему списку</a>
 </div>
 
 @section Scripts {
