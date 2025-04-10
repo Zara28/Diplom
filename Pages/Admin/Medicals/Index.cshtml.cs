@@ -15,12 +15,21 @@ namespace OfficeTime.Pages.Admin.Medicals
 {
     public class IndexModel(IMediator mediator) : PageModel
     {
+        public DateTime DateStart { get; set; }
+        public DateTime DateEnd { get; set; }
         public IList<MedicalView> MedicalView { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(DateTime? datestart, DateTime? dateEnd)
         {
             var result = await mediator.Send(new GetMedicalQuery());
-            MedicalView = result.Response;
+            if (datestart.HasValue && dateEnd.HasValue)
+            {
+                MedicalView = result.Response.Where(h => h.Datestart?.ToDateTime(new TimeOnly()) > datestart && h.Datestart?.ToDateTime(new TimeOnly()) < dateEnd).ToList();
+            }
+            else
+            {
+                MedicalView = result.Response;
+            }
         }
     }
 }

@@ -19,12 +19,28 @@ namespace OfficeTime.Pages.Admin.Holidays
     public class IndexModel(IMediator mediator) : PageModel
     {
         public IList<HolidayView> HolidayView { get;set; } = default!;
+        public DateTime DateStart { get; set; }
+        public DateTime DateEnd { get; set; }
 
-        public async Task OnGetAsync()
+        //public async Task OnGetAsync()
+        //{
+        //    var result = await mediator.Send(new GetHolidaysQuery());
+        //    
+        //}
+
+        public async Task OnGetAsync(DateTime? datestart, DateTime? dateEnd)
         {
             var result = await mediator.Send(new GetHolidaysQuery());
-            HolidayView = result.Response.Where(h => h.Canceled != true).ToList();
+            if (datestart.HasValue && dateEnd.HasValue)
+            {
+                HolidayView = result.Response.Where(h => h.Canceled != true && h.Datestart?.ToDateTime(new TimeOnly()) > datestart && h.Datestart?.ToDateTime(new TimeOnly()) < dateEnd).ToList();
+            }
+            else
+            {
+                HolidayView = result.Response.Where(h => h.Canceled != true).ToList();
+            }
         }
+
         public async Task<IActionResult> OnPostAgree(IFormCollection form)
         {
             var holidayId = Convert.ToInt32(form["holidayId"].ToString());

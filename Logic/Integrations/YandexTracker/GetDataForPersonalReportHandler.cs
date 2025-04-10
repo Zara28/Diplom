@@ -51,19 +51,20 @@ namespace OfficeTime.Logic.Integrations.YandexTracker
             {
                 var holidays = holidaydata.Where(h => h.Empid == user.Id).OrderBy(h => h.Datestart).ToList();
                 var medicals = medicaldata.Where(h => h.Empid == user.Id).OrderBy(h => h.Datestart).ToList();
-                var data = cacheResult.Response;
+                var data = cacheResult.Response.Where(c => c.DateStart > query.StartIntervalEnding && c.DateStart < query.EndIntervalEnding);
                 var tracker = data.Where(r => r.Assignee.Name.Trim().ToLower() == user.Yandex?.Trim().ToLower());
 
                 double holidaysHours = holidays.Sum(h => SumHour(h.Datestart, h.Dateend));
                 double medicalsHours = holidays.Sum(h => SumHour(h.Datestart, h.Dateend));
                 double trackerHours = tracker.Sum(t => ConvertFromString(t.Spent));
                 double totalHours = SumHour(query.StartIntervalEnding, query.EndIntervalEnding);
-                double percent = double.Round(trackerHours / (totalHours - (holidaysHours + medicalsHours)), 2, MidpointRounding.AwayFromZero);
+                double znam = (totalHours - (holidaysHours + medicalsHours));
+                double percent = trackerHours / (znam == 0 ? 1 : znam);
 
                 var report = new Report()
                 {
                     FIO = user.Fio,
-                    percent = percent == double.NaN ? 0 : percent * 100,
+                    percent = percent == double.NaN ? 0 : double.Round(percent * 100, 2, MidpointRounding.AwayFromZero),
                     holidays = holidaysHours,
                     hours = trackerHours,
                     id = user.Id,

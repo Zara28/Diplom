@@ -57,8 +57,8 @@ namespace OfficeTime.Pages.Admin.Holidays
             await mediator.Send(new UpdateHolidayCommand
             {
                 Id = HolidayView.Id,
-                Datestart = HolidayView.Datestart,
-                Dateend = HolidayView.Dateend,
+                Datestart = HolidayView.Datestart?.ToDateTime(new TimeOnly()),
+                Dateend = HolidayView.Dateend?.ToDateTime(new TimeOnly()),
 
                 Pay = HolidayView.Pay,
 
@@ -66,7 +66,7 @@ namespace OfficeTime.Pages.Admin.Holidays
 
                 Isdirectorapp = HolidayView.Isdirectorapp,
 
-                Dateapp = HolidayView.Dateapp,
+                Dateapp = HolidayView.Dateapp?.ToDateTime(new TimeOnly()),
 
                 Empid = id
             });

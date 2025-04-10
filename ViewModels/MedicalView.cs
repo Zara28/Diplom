@@ -4,11 +4,11 @@
     {
         public int Id { get; set; }
 
-        public DateTime? Datestart { get; set; }
+        public DateOnly? Datestart { get; set; }
 
-        public DateTime? Dateend { get; set; }
+        public DateOnly? Dateend { get; set; }
 
-        public DateTime? Datecreate { get; set; }
+        public DateOnly? Datecreate { get; set; }
 
         public string Emp { get; set; }
     }

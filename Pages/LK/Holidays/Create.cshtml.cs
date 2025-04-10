@@ -36,8 +36,8 @@ namespace OfficeTime.Pages.Admin.Holidays
 
             await mediator.Send(new CreateHolidayCommand
             {
-                Datestart = HolidayView.Datestart,
-                Dateend = HolidayView.Dateend,
+                Datestart = HolidayView.Datestart?.ToDateTime(new TimeOnly()),
+                Dateend = HolidayView.Dateend?.ToDateTime(new TimeOnly()),
                 Pay = HolidayView.Pay,
                 Empid = id
             });

@@ -51,8 +51,8 @@ namespace OfficeTime.Pages.Admin.Medicals
             await mediator.Send(new UpdateMedicalCommand
             {
                 Id = MedicalView.Id,
-                Datestart = MedicalView.Datestart.Value,
-                Dateend = MedicalView.Dateend.Value
+                Datestart = MedicalView.Datestart.Value.ToDateTime(new TimeOnly()),
+                Dateend = MedicalView.Dateend.Value.ToDateTime(new TimeOnly())
             });
 
             return RedirectToPage("./Index");

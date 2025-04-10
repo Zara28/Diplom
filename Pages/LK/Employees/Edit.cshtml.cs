@@ -53,8 +53,8 @@ namespace OfficeTime.Pages.Admin.Employees
                 Fio = Employee.Fio,
                 Telegram = Employee.Telegram,
                 Yandex = Employee.Yandex,
-                Datebirth = Employee.Datebirth,
-                Datestart = Employee.Datestart,
+                Datebirth = Employee.Datebirth?.ToDateTime(new TimeOnly()),
+                Datestart = Employee.Datestart?.ToDateTime(new TimeOnly()),
                 Password = Convert.ToBase64String(Employee.Password.ToSHA256())
             });
 

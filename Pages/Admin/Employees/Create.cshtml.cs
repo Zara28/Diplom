@@ -47,8 +47,8 @@ namespace OfficeTime.Pages.Admin.Employees
                 Fio = Employee.Fio,
                 Telegram = Employee.Telegram,
                 Yandex = Employee.Yandex,
-                Datebirth = Employee.Datebirth,
-                Datestart = Employee.Datestart,
+                Datebirth = Employee.Datebirth?.ToDateTime(new TimeOnly()),
+                Datestart = Employee.Datestart?.ToDateTime(new TimeOnly()),
                 Password = Employee.Password,
                 PostId = Convert.ToInt32(Employee.Post),
                 RoleId = Convert.ToInt32(Employee.Role)

@@ -13,15 +13,15 @@ namespace OfficeTime.ViewModels
 
         public string? Yandex { get; set; } = String.Empty;
 
-        public DateTime? Datebirth { get; set; }
+        public DateOnly? Datebirth { get; set; }
 
-        public DateTime? Datestart { get; set; }
+        public DateOnly? Datestart { get; set; }
 
         public string? Post { get; set; }
         public string? Password { get; set; } = String.Empty;
 
         public bool IsDelete { get; set; }
-        public DateTime? DeleteDate { get; set; }
+        public DateOnly? DeleteDate { get; set; }
         public RoleAccess Role {  get; set; }
     }
 }

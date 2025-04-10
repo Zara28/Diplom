@@ -36,8 +36,8 @@ namespace OfficeTime.Pages.Admin.Medicals
 
             await mediator.Send(new CreateMedicalCommand
             {
-                DateStart = MedicalView.Datestart.Value,
-                DateEnd = MedicalView.Dateend.Value,
+                DateStart = MedicalView.Datestart.Value.ToDateTime(new TimeOnly()),
+                DateEnd = MedicalView.Dateend.Value.ToDateTime(new TimeOnly()),
                 EmpId = (int)id
             });
 

@@ -11,7 +11,6 @@ namespace OfficeTime.Pages.Admin.Employees
 {
     public class IndexModel(IMediator mediator) : PageModel
     {
-
         public IList<EmployeeView> Employee { get; set; } = default!;
 
         public async Task OnGetAsync()

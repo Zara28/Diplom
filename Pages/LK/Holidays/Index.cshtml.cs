@@ -18,16 +18,22 @@ namespace OfficeTime.Pages.Admin.Holidays
     public class IndexLKModel(IMediator mediator,
                               IHttpContextAccessor _httpContextAccessor) : PageModel
     {
+        public DateTime DateStart { get; set; }
+        public DateTime DateEnd { get; set; }
         public IList<HolidayView> HolidayView { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(DateTime? dateStart, DateTime? dateEnd)
         {
             var id = _httpContextAccessor.HttpContext.Session.GetId();
             var result = await mediator.Send(new GetHolidaysQuery
             {
                 EmpId = id
             });
-            HolidayView = result.Response;
+            if(dateStart.HasValue && dateEnd.HasValue)
+            {
+                HolidayView = result.Response.Where(h => h.Datestart?.ToDateTime(new TimeOnly()) > dateStart && h.Datestart?.ToDateTime(new TimeOnly()) < dateEnd).ToList();
+            }
+            else HolidayView = result.Response;
         }
     }
 }
