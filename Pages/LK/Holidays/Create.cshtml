@@ -14,12 +14,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="HolidayView.Datestart" class="control-label">Дата начала</label>
-                <input asp-for="HolidayView.Datestart" class="form-control" />
+                <input asp-for="HolidayView.Datestart" class="form-control" type="date" />
                 <span asp-validation-for="HolidayView.Datestart" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="HolidayView.Dateend" class="control-label">Дата окончания</label>
-                <input asp-for="HolidayView.Dateend" class="form-control" />
+                <input asp-for="HolidayView.Dateend" class="form-control" type="date" />
                 <span asp-validation-for="HolidayView.Dateend" class="text-danger"></span>
             </div>
             <div class="form-group">
