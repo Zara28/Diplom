@@ -7,6 +7,7 @@ using Goldev.Core.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeTime.DBModels;
 using OfficeTime.GenerationModels;
@@ -21,12 +22,6 @@ namespace OfficeTime.Pages.Admin.Holidays
         public IList<HolidayView> HolidayView { get;set; } = default!;
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
-
-        //public async Task OnGetAsync()
-        //{
-        //    var result = await mediator.Send(new GetHolidaysQuery());
-        //    
-        //}
 
         public async Task OnGetAsync(DateTime? datestart, DateTime? dateEnd)
         {

@@ -14,6 +14,7 @@ namespace OfficeTime.Pages
         public static RoleAccess Role { get; set; } = RoleAccess.NONE;
         public void OnGet()
         {
+            Role = RoleAccess.NONE;
         }
 
         public async Task<IActionResult> OnPostAsync(IFormCollection form)

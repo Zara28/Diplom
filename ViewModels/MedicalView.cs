@@ -10,6 +10,6 @@
 
         public DateOnly? Datecreate { get; set; }
 
-        public string Emp { get; set; }
+        public string? Emp { get; set; }
     }
 }
