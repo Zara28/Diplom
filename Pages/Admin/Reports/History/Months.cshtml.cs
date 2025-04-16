@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OfficeTime.Logic.Integrations.YandexTracker.Cache;
 using OfficeTime.Logic.Integrations.YandexTracker.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OfficeTime.Pages.Admin.Reports.History
 {
@@ -19,34 +20,48 @@ namespace OfficeTime.Pages.Admin.Reports.History
 
         public async Task<IActionResult> OnGetAsync(int months = 3)
         {
-            await cache.Refresh();
-            for (int i = (months - 1)*(-1); i <= 0; i++)
+            Task[] tasks = new Task[months];
+            int c = 0;
+
+            for(int i = (months - 1) * (-1); i <= 0; i++)
             {
-                var data = await mediator.Send(new LoadADataReportCommand
+                tasks[c] = Task.Run(async () =>
                 {
-                    StartIntervalEnding = Convert.ToDateTime(DateTime.Now.AddMonths(i)),
-                    EndIntervalEnding = Convert.ToDateTime(DateTime.Now.AddMonths(i - 1))
+                    var data = await mediator.Send(new LoadADataReportCommand
+                    {
+                        StartIntervalEnding = Convert.ToDateTime(DateTime.Now.AddMonths(i)),
+                        EndIntervalEnding = Convert.ToDateTime(DateTime.Now.AddMonths(i - 1))
+                    });
+
+                    var list = data.Response;
+
+                    if(list != null)
+                    {
+                        if (Model == null)
+                        {
+                            Model = new List<MonthsReport>();
+                            list.ForEach(l =>
+                            {
+                                Model.Add(new MonthsReport
+                                {
+                                    FIO = l.FIO,
+                                    Percents = new() { l?.percent == double.NaN ? 0 : l.percent },
+                                });
+                            });
+                        }
+                        else
+                        {
+                            list.ForEach(l => Model.Where(m => m.FIO == l.FIO).FirstOrDefault().Percents.Add(l.percent));
+                        }
+                    }
+
+                    
                 });
 
-                var list = data.Response;
-
-                if (Model == null)
-                {
-                    Model = new List<MonthsReport>();
-                    list.ForEach(l =>
-                    {
-                        Model.Add(new MonthsReport
-                        {
-                            FIO = l.FIO,
-                            Percents = new() { l?.percent == double.NaN ? 0 : l.percent },
-                        });
-                    });
-                }
-                else
-                {
-                    list.ForEach(l => Model.Where(m => m.FIO == l.FIO).FirstOrDefault().Percents.Add(l.percent));
-                }
+                c++;
             }
+
+            Task.WaitAll(tasks);
 
             return Page();
         }

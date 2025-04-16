@@ -18,9 +18,17 @@ namespace OfficeTime.Logic.Integrations.YandexTracker.Cache
         {
             TItem cacheEntry;
 
+            foreach (object item in _cache.Keys)
+            {
+                if(item.Equals(key))
+                {
+                    return (TItem)_cache.Get(item);
+                }
+            }
+
             if (!_cache.TryGetValue(key, out cacheEntry))// Ищем ключ в кэше.
             {
-                SemaphoreSlim mylock = _locks.GetOrAdd(key, k => new SemaphoreSlim(1, 1));
+                SemaphoreSlim mylock = _locks.GetOrAdd(key, k => new SemaphoreSlim(1, 10));
 
                 await mylock.WaitAsync();
                 try
