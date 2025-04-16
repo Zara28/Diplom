@@ -16,7 +16,7 @@ namespace OfficeTime.Pages.Admin.Reports.Operation
         public IList<Report> Reports { get; set; } = default!;
         public async Task OnGetAsync()
         {
-            await cache.Refresh();
+            //await cache.Refresh();
         }
 
         public async Task<IActionResult> OnPostAsync(IFormCollection form)

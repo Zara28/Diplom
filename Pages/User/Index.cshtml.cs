@@ -27,31 +27,39 @@ namespace OfficeTime.Pages.User
 
             var id = _httpContextAccessor.HttpContext.Session.GetId();
 
-            var holiday = await mediator.Send(new GetHolidaysQuery
-            {
-                DateStart = firstDayOfMonth,
-                DateEnd = lastDayOfMonth,
-                EmpId = id,
-            });
-
-            Holidays = holiday.Response;
-
-            var medicals = await mediator.Send(new GetMedicalQuery
-            {
-                DateStart = firstDayOfMonth,
-                DateEnd = lastDayOfMonth,
-                EmpId = id,
-            });
-
-            Medicals = medicals.Response;
-
-            var report = await mediator.Send(new LoadADataReportCommand
+            var report = mediator.Send(new LoadADataReportCommand
             {
                 StartIntervalEnding = firstDayOfMonth,
                 EndIntervalEnding = lastDayOfMonth
             });
 
-            Report = report.Response.FirstOrDefault(r => r.id == id);
+            var holiday = mediator.Send(new GetHolidaysQuery
+            {
+                DateStart = firstDayOfMonth,
+                DateEnd = lastDayOfMonth,
+                EmpId = id,
+            });
+
+
+            var medicals = mediator.Send(new GetMedicalQuery
+            {
+                DateStart = firstDayOfMonth,
+                DateEnd = lastDayOfMonth,
+                EmpId = id,
+            });
+
+            //var tasks = new Task[] {holiday, medicals, report};
+
+            //await Task.WhenAll(tasks);
+
+            await medicals;
+            await holiday;
+
+            Holidays = holiday.Result.Response;
+            Medicals = medicals.Result.Response;
+            await report;
+
+            Report = report.Result.Response.FirstOrDefault(r => r.id == id);
 
         }
     }

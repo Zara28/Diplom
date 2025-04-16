@@ -33,8 +33,8 @@ namespace OfficeTime.Logic.Integrations.YandexTracker
             {
                 var result = await mediator.Send(new LoadAllTasksByFilterCommand
                 {
-                    StartIntervalEnding = query.StartIntervalEnding,
-                    EndIntervalEnding = query.EndIntervalEnding
+                    StartIntervalEnding = query.StartIntervalEnding?.Date,
+                    EndIntervalEnding = query.EndIntervalEnding?.Date
                 });
 
                 return result;
