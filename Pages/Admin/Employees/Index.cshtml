@@ -62,12 +62,23 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Post)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDelete)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeleteDate)
-            </td>
+            @if(item.IsDelete)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsDelete)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeleteDate)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                }
+                
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Редактировать</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Подробнее</a> |
