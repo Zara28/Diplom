@@ -22,7 +22,9 @@ builder.Services.AddRazorPages(options =>
 });
 //builder.Services.AddRazorPages();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddScoped<diplom_adminkaContext>();
+builder.Services.AddTransient<diplom_adminkaContext>();
+builder.Services.AddMemoryCache();
+
 builder.Services.AddSingleton<MemoryCache<ResponseModel<List<YandexTask>>>>();
 builder.Services.AddMediatR<Program>();
 builder.Services.AddHttpContextAccessor();

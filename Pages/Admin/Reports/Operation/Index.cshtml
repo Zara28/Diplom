@@ -3,17 +3,17 @@
 @{
 }
 
-<form method="post">
+<form method="post" class="row g-3">
     <div class="container">
         <div class='col-md-5'>
-            <div class="form-group">
+            <div class="form-group col-auto">
                 <div class='input-group date' id='datetimepicker6'>
                     <input type='date' class="form-control" id="start" name="start"/>
                 </div>
             </div>
         </div>
         <div class='col-md-5'>
-            <div class="form-group">
+            <div class="form-group col-auto">
                 <div class='input-group date' id='datetimepicker7'>
                     <input type='date' class="form-control" id="end" name="end" />
                 </div>
@@ -29,16 +29,20 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Reports[0].FIO)
+                @* @Html.DisplayNameFor(model => model.Reports[0].FIO) *@
+                ФИО
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Reports[0].percent)
+                @* @Html.DisplayNameFor(model => model.Reports[0].percent) *@
+                Процент
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Reports[0].holidays)
+                @* @Html.DisplayNameFor(model => model.Reports[0].holidays) *@
+                Отпуск
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Reports[0].hours)
+                @* @Html.DisplayNameFor(model => model.Reports[0].hours) *@
+                Часы
             </th>
             <th></th>
         </tr>
