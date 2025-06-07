@@ -27,7 +27,21 @@ namespace OfficeTime.Logic.Integrations.YandexTracker
 
         public override async Task<IHandleResult<List<YandexTask>>> HandleAsync(LoadAllTasksByFilterCommand request, CancellationToken cancellationToken)
         {
+            //if (ytConfig.Value == null || ytConfig.Value.BaseUrl == null || String.IsNullOrEmpty(ytConfig.Value.BaseUrl))
+            //{
+            //    _filtredTaskUrl = "/v2/issues/_search?expand=transitions";
+
+            //    _configuration = new YandexTrackerConfiguration()
+            //    {
+            //        BaseUrl = "https://api.tracker.yandex.net",
+            //        OrganizationId = "bpf8kp3b9digpar1rmtb",
+            //        Token = "y0__xDS57OKBhiWkjYgvZryyRJIukFMcvGg_x1Ri57IMF72D-pvZA"
+            //    };
+
+            //}
+            //else
             _configuration = ytConfig.Value;
+            
 
             _restClient = _configuration.CreateClient();
 

@@ -63,7 +63,7 @@ namespace OfficeTime.Logic.Handlers.Generation
 
             var data = JsonConvert.SerializeObject(model);
 
-            await _mediator.Send(new DocumentSendCommand
+            var task = Task.Run(async() => await _mediator.Send(new DocumentSendCommand
             {
                 InputModel = new Integrations.Refit.Intefaces.InputModel
                 {
@@ -71,8 +71,9 @@ namespace OfficeTime.Logic.Handlers.Generation
                     TelegramId = _telegramMain,
                     TypeEnum = TypeEnum.Posts
                 }
-            });
+            }));
 
+            await Task.WhenAll(task);
             return await Ok();
         }
 

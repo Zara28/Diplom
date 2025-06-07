@@ -9,6 +9,7 @@ using OfficeTime.DBModels;
 using OfficeTime.Logic.Integrations.YandexTracker.Cache;
 using OfficeTime.Logic.Integrations.YandexTracker.Models;
 using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace OfficeTime.Logic.Integrations.YandexTracker
 {
@@ -29,6 +30,8 @@ namespace OfficeTime.Logic.Integrations.YandexTracker
     {
         public override async Task<IHandleResult<List<Report>>> HandleAsync(LoadADataReportCommand query, CancellationToken cancellationToken)
         {
+            var users = context.Employees;
+
             var task = async (LoadADataReportCommand query, IMediator mediator) =>
             {
                 var result = await mediator.Send(new LoadAllTasksByFilterCommand
@@ -39,15 +42,15 @@ namespace OfficeTime.Logic.Integrations.YandexTracker
 
                 return result;
             };
+
             var cacheResult = await cache.GetOrCreate(query, async () => await task(query, mediator));
             var holidaydata = context.Holidays.Where(h => h.Datestart >= query.StartIntervalEnding && h.Dateend <= query.EndIntervalEnding);
             var medicaldata = context.Medicals.Where(h => h.Datestart >= query.StartIntervalEnding && h.Dateend <= query.EndIntervalEnding);
 
-            var users = context.Employees.ToList();
 
             List<Report> results = new List<Report>();
 
-            foreach (var user in users)
+            foreach (var user in users.ToList())
             {
                 var holidays = holidaydata.Where(h => h.Empid == user.Id).OrderBy(h => h.Datestart).ToList();
                 var medicals = medicaldata.Where(h => h.Empid == user.Id).OrderBy(h => h.Datestart).ToList();

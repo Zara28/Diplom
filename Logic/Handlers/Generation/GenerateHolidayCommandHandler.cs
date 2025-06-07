@@ -42,7 +42,7 @@ namespace OfficeTime.Logic.Handlers.Generation
             DateTime dateStart;
             DateTime dateEnd;
 
-            if(command.Type == TypeEnum.PutHolidays)
+            if(command.Type == TypeEnum.HolidaysT7)
             {
                 dateStart = new DateTime(date.Year, 1, 1);
                 dateEnd = dateStart.AddYears(1).AddDays(-1);
@@ -103,7 +103,7 @@ namespace OfficeTime.Logic.Handlers.Generation
                 data = JsonConvert.SerializeObject(model);
             }
 
-            await _mediator.Send(new DocumentSendCommand
+            var TAsk = Task.Run(async () => await _mediator.Send(new DocumentSendCommand
             {
                 InputModel = new Integrations.Refit.Intefaces.InputModel
                 {
@@ -111,8 +111,9 @@ namespace OfficeTime.Logic.Handlers.Generation
                     TelegramId = _telegramMain,
                     TypeEnum = command.Type
                 }
-            });
+            }));
 
+            await Task.WhenAll(TAsk);
             return await Ok();
         }
     }

@@ -48,11 +48,13 @@ namespace OfficeTime.Logic.Handlers.Holidays
             var who = command.IsLead ? "Лид" : "Руководитель";
             var what = command.Value ? "одобрил" : "отклонил";
 
-            await _mediator.Send(new NotificationSendCommand
+            var task = Task.Run(async() => await _mediator.Send(new NotificationSendCommand
             {
                 Telegram = emp.Telegram,
                 Message = $"{who} {what} вашу заявку на отпуск с {holiday.Datestart}"
-            });
+            }));
+
+            await Task.WhenAll(task);
 
             return await Ok();
         }

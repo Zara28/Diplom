@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OfficeTime.Logic.Integrations.YandexTracker.Cache;
 using OfficeTime.Logic.Integrations.YandexTracker.Models;
+using Syncfusion.EJ2.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OfficeTime.Pages.Admin.Reports.History
@@ -22,15 +23,24 @@ namespace OfficeTime.Pages.Admin.Reports.History
         {
             Task[] tasks = new Task[months];
             int c = 0;
+            var dates = new List<DateTime>();
 
-            for(int i = (months - 1) * (-1); i <= 0; i++)
+
+
+            for(int i = (months - 1)*(-1); i <= 0; i++)
             {
+                var startDate = DateTime.Now.AddMonths(i);
+                var endDate = Convert.ToDateTime(DateTime.Now.AddMonths(i + 1));
                 tasks[c] = Task.Run(async () =>
                 {
+                    Console.WriteLine(i);
+                    Console.WriteLine(startDate);
+                    Console.WriteLine(endDate);
+
                     var data = await mediator.Send(new LoadADataReportCommand
                     {
-                        StartIntervalEnding = Convert.ToDateTime(DateTime.Now.AddMonths(i)),
-                        EndIntervalEnding = Convert.ToDateTime(DateTime.Now.AddMonths(i - 1))
+                        StartIntervalEnding = startDate,
+                        EndIntervalEnding = endDate
                     });
 
                     var list = data.Response;
@@ -61,7 +71,7 @@ namespace OfficeTime.Pages.Admin.Reports.History
                 c++;
             }
 
-            Task.WaitAll(tasks);
+            await Task.WhenAll(tasks);
 
             return Page();
         }

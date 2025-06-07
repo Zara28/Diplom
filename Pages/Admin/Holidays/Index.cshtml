@@ -102,6 +102,10 @@
                         {
                             <label>Согласован</label>
                         }
+                        @if (item.Isleadapp.HasValue && item.Isleadapp == false)
+                        {
+                            <label>Отклонен</label>
+                        }
                         else
                         {
                             <form method="post">

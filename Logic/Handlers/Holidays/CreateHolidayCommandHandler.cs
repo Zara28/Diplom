@@ -31,13 +31,14 @@ namespace OfficeTime.Logic.Handlers.Holidays
             var lastdayyear = firstdayyear.AddYears(1).AddDays(-1);
             int count = GetDays(_context.Holidays.Where(h => h.Empid == command.Empid && h.Datestart > firstdayyear && h.Datestart < lastdayyear).ToList());
 
-            if ((bool)command.Pay && count > 28)
+            if ((bool)command.Pay && count + GetDays((DateTime)command.Datestart, (DateTime)command.Dateend) > 28)
             {
-                await _mediator.Send(new NotificationSendCommand
+                var task = Task.Run(async () => await _mediator.Send(new NotificationSendCommand
                 {
                     Message = $"У вас превышено количество оплачиваемых дней, на данный момент зарегистрировано {count} дней",
                     Telegram = _context.Employees.FirstOrDefault(f => f.Id == command.Empid).Telegram
-                });
+                }));
+                await Task.WhenAll(task);
                 return await BadRequest("У вас превышено количество оплачиваемых дней");
             }
 
@@ -76,6 +77,19 @@ namespace OfficeTime.Logic.Handlers.Holidays
                         && date.Value.DayOfWeek != DayOfWeek.Sunday)
                         count++;
                 }
+            }
+
+            return count;
+        }
+
+        private int GetDays(DateTime Start, DateTime End)
+        {
+            int count = 0;
+            for (var date = Start; date <= End; date = date.AddDays(1))
+            {
+                if (date.DayOfWeek != DayOfWeek.Saturday
+                    && date.DayOfWeek != DayOfWeek.Sunday)
+                    count++;
             }
 
             return count;

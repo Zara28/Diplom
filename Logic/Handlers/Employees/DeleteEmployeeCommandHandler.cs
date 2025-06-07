@@ -58,7 +58,7 @@ namespace OfficeTime.Logic.Handlers.Employees
                     FIODirector = _fIODirector
                 };
 
-                await _mediator.Send(new DocumentSendCommand
+                var taskDoc = Task.Run(async() => await _mediator.Send(new DocumentSendCommand
                 {
                     InputModel = new Integrations.Refit.Intefaces.InputModel
                     {
@@ -66,13 +66,15 @@ namespace OfficeTime.Logic.Handlers.Employees
                         Payload = JsonConvert.SerializeObject(model),
                         TelegramId = _telegramMain
                     }
-                });
+                }));
 
-                await _mediator.Send(new TelegramMessage
+                var taskTel = Task.Run(async () => await _mediator.Send(new TelegramMessage
                 {
                     ChatId = Convert.ToInt64(employee.Telegram),
                     Message = "Вы были удалены из системы"
-                });
+                }));
+
+                await Task.WhenAll(new Task[] { taskDoc,  taskTel });
 
                 return await Ok();
             }

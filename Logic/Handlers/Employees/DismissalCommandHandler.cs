@@ -41,11 +41,13 @@ namespace OfficeTime.Logic.Handlers.Employees
 
                 var emp = _context.Employees.FirstOrDefault(e => e.Id == command.Id);
 
-                await _mediator.Send(new NotificationSendCommand
+                var task = Task.Run(async () => await _mediator.Send(new NotificationSendCommand
                 {
                     Telegram = _telegramMain,
                     Message = $"{emp.Fio} подал заявку на увольнение с {command.Date}"
-                });
+                }));
+
+                await Task.WhenAll(task);
 
                 return await Ok();
             }

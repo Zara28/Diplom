@@ -28,13 +28,16 @@ namespace OfficeTime.Logic.Handlers.Medicals
         {
             var holidays = _context.Holidays.Where(h => h.Empid == command.EmpId).ToList();
 
-            if (holidays.Any(h => h.Datestart >= command.DateStart || h.Dateend <= command.DateEnd))
+            if (holidays.Any(h => h.Datestart >= command.DateStart && h.Dateend <= command.DateEnd))
             {
-                await _mediator.Send(new NotificationSendCommand
+                var task = Task.Run(async () => await _mediator.Send(new NotificationSendCommand
                 {
                     Message = $"Ваш больничный совпал с отпуском. Обсудите перенос отпуска за эти дни с руководством",
                     Telegram = _context.Employees.FirstOrDefault(f => f.Id == command.EmpId).Telegram
-                });
+                }));
+
+                await Task.WhenAll(task);
+                await BadRequest("Ваш больничный совпал с отпуском. Обсудите перенос отпуска за эти дни с руководством");
             }
 
             var medical = new Medical

@@ -69,21 +69,29 @@ namespace OfficeTime.Logic.Handlers.Employees
                 FIODirector = _fIODirector
             };
 
-            await _mediator.Send(new DocumentSendCommand
+            var taskDoc = Task.Run(async () =>
             {
-                InputModel = new Integrations.Refit.Intefaces.InputModel
+                await _mediator.Send(new DocumentSendCommand
                 {
-                    TypeEnum = TypeEnum.AddEmployee,
-                    Payload = JsonConvert.SerializeObject(model),
-                    TelegramId = _telegramMain,
-                }
+                    InputModel = new Integrations.Refit.Intefaces.InputModel
+                    {
+                        TypeEnum = TypeEnum.AddEmployee,
+                        Payload = JsonConvert.SerializeObject(model),
+                        TelegramId = _telegramMain,
+                    }
+                });
             });
 
-            await _mediator.Send(new TelegramMessage
+            var taskTelegram = Task.Run(async() =>
             {
-                ChatId = Convert.ToInt64(employee.Telegram),
-                Message = "В отдел кадров был отправлен приказ о вашем приеме на работу"
+                await _mediator.Send(new TelegramMessage
+                {
+                    ChatId = Convert.ToInt64(employee.Telegram),
+                    Message = "В отдел кадров был отправлен приказ о вашем приеме на работу"
+                });
             });
+            
+            await Task.WhenAll(new []{taskDoc, taskTelegram});
 
             return await Ok();
         }
